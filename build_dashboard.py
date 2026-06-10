@@ -100,6 +100,8 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
       {int_med_cells}
     </tr>"""
 
+    # Spacer row
+    rows += f"""<tr class="table-spacer-row"><td colspan="{len(CHIPS) + 1}"></td></tr>"""
     # 3. Indian Providers Section
     rows += f"""<tr class="group-header-row"><td colspan="{len(CHIPS) + 1}"><strong>Indian Providers</strong></td></tr>"""
     for site in ind_sites:
@@ -134,6 +136,8 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
       {ind_med_cells}
     </tr>"""
 
+    # Spacer row
+    rows += f"""<tr class="table-spacer-row"><td colspan="{len(CHIPS) + 1}"></td></tr>"""
     # 5. Combined Total Averages & Medians (Distinct Blue background)
     all_avg_cells = "".join(
         f"<td><strong>${all_averages[c]:.2f}</strong></td>" if all_averages[c] is not None else "<td><strong>—</strong></td>"
@@ -268,27 +272,28 @@ def generate_html(latest, history):
   <title>GPU-as-a-Service Pricing Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {{
-      --bg: #f8fafc;
+      --bg: #f9f9f8;
       --surface: #ffffff;
-      --surface-hover: #f1f5f9;
-      --border: #e2e8f0;
-      --border-hover: #cbd5e1;
-      --text: #0f172a;
-      --muted: #475569;
-      --accent: #2563eb;
+      --surface-hover: #f4f4f2;
+      --border: #e8e8e6;
+      --border-hover: #e0e0de;
+      --text: #1a1a1a;
+      --muted: #555552;
+      --accent: #1a1a1a;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       padding: 3rem 2rem;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
     }}
     .container {{
       max-width: 1200px;
@@ -378,26 +383,33 @@ def generate_html(latest, history):
       background-color: var(--surface-hover);
     }}
     tr.group-header-row td {{
-      background-color: #f8fafc;
-      color: #334155;
+      background-color: var(--bg);
+      color: var(--text);
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       padding: 0.8rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }}
+    tr.table-spacer-row td {{
+      height: 24px;
+      padding: 0;
+      background-color: var(--bg);
+      border: none;
+    }}
     tr.summary-row td {{
       font-weight: 600;
       border-top: 1px solid var(--border);
     }}
     tr.int-summary-row td {{
-      background-color: #fafafa;
-      color: #475569;
+      background-color: #f0fdf4; /* soft light green */
+      color: #166534;
+      border-top: 1px solid #dcfce7;
     }}
     tr.int-summary-row:hover td {{
-      background-color: #f4f4f5;
+      background-color: #dcfce7;
     }}
     tr.ind-summary-row td {{
       background-color: #fffbeb;

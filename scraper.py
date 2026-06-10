@@ -265,22 +265,19 @@ async def scrape_site(site: dict) -> dict:
 
     try:
         async with async_playwright() as p:
-            # Check if Browserbase API key is available
-            use_browserbase = bool(os.environ.get("BROWSERBASE_API_KEY"))
+            # Force Browserbase usage (no local Chromium fallback)
+            browserbase_key = os.environ.get("BROWSERBASE_API_KEY")
+            if not browserbase_key:
+                raise ValueError("Error: BROWSERBASE_API_KEY environment variable is missing. You must configure this key to run the scraper.")
             
-            if use_browserbase:
-                print("Connecting to Browserbase cloud browser...")
-                from browserbase import Browserbase
-                bb = Browserbase(api_key=os.environ["BROWSERBASE_API_KEY"])
-                # Create session (run in executor since it's synchronous)
-                session = await asyncio.to_thread(bb.sessions.create)
-                browser = await p.chromium.connect_over_cdp(session.connect_url)
-                # Browserbase remote sessions have a context and page pre-opened
-                context = browser.contexts[0].pages[0]
-            else:
-                print("Using local Chromium browser...")
-                browser = await p.chromium.launch(headless=True)
-                context = await browser.new_page()
+            print("Connecting to Browserbase cloud browser...")
+            from browserbase import Browserbase
+            bb = Browserbase(api_key=browserbase_key)
+            session = await asyncio.to_thread(bb.sessions.create)
+            print(f"Browserbase Session Created: {session.id}")
+            browser = await p.chromium.connect_over_cdp(session.connect_url)
+            # Browserbase remote sessions have a context and page pre-opened
+            context = browser.contexts[0].pages[0]
 
             # Navigate to the page
             print(f"Navigating to {site['url']}...")

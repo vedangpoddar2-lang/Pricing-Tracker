@@ -6,27 +6,28 @@
   <title>GPU-as-a-Service Pricing Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #f9f9f8;
       --surface: #ffffff;
-      --surface-hover: #f1f5f9;
-      --border: #e2e8f0;
-      --border-hover: #cbd5e1;
-      --text: #0f172a;
-      --muted: #475569;
-      --accent: #2563eb;
+      --surface-hover: #f4f4f2;
+      --border: #e8e8e6;
+      --border-hover: #e0e0de;
+      --text: #1a1a1a;
+      --muted: #555552;
+      --accent: #1a1a1a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       padding: 3rem 2rem;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
     }
     .container {
       max-width: 1200px;
@@ -116,26 +117,33 @@
       background-color: var(--surface-hover);
     }
     tr.group-header-row td {
-      background-color: #f8fafc;
-      color: #334155;
+      background-color: var(--bg);
+      color: var(--text);
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       padding: 0.8rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
+    tr.table-spacer-row td {
+      height: 24px;
+      padding: 0;
+      background-color: var(--bg);
+      border: none;
+    }
     tr.summary-row td {
       font-weight: 600;
       border-top: 1px solid var(--border);
     }
     tr.int-summary-row td {
-      background-color: #fafafa;
-      color: #475569;
+      background-color: #f0fdf4; /* soft light green */
+      color: #166534;
+      border-top: 1px solid #dcfce7;
     }
     tr.int-summary-row:hover td {
-      background-color: #f4f4f5;
+      background-color: #dcfce7;
     }
     tr.ind-summary-row td {
       background-color: #fffbeb;
@@ -319,7 +327,7 @@
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Median</strong></td>
       <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.92</strong></td><td><strong>$7.50</strong></td>
-    </tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
+    </tr><tr class="table-spacer-row"><td colspan="5"></td></tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
         <tr>
           <td class="provider">
             <a href="https://neysa.ai/pricing/" target="_blank">Neysa</a>
@@ -339,7 +347,7 @@
     <tr class="summary-row ind-summary-row">
       <td class="provider"><strong>Indian Median</strong></td>
       <td><strong>$3.50</strong></td><td><strong>$3.93</strong></td><td><strong>$6.50</strong></td><td><strong>—</strong></td>
-    </tr>
+    </tr><tr class="table-spacer-row"><td colspan="5"></td></tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Average (All)</strong></td>
       <td><strong>$3.61</strong></td><td><strong>$4.58</strong></td><td><strong>$7.20</strong></td><td><strong>$6.21</strong></td>
