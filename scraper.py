@@ -197,12 +197,7 @@ def extract_json_from_result(text: str) -> dict | None:
     return None
 
 
-def sanity_check(chip: str, price: float | None) -> str:
-    """Return 'ok', 'flagged', or 'null'."""
-    if price is None:
-        return "null"
-    lo, hi = SANITY_RANGES.get(chip, (0, 9999))
-    return "ok" if lo <= price <= hi else "flagged"
+
 
 
 def clean_extracted_text(text: str) -> str:
@@ -358,13 +353,12 @@ async def scrape_site(site: dict) -> dict:
     except Exception as e:
         print(f"  ERROR scraping {site['name']}: {e}")
 
-    # Build structured result with sanity flags
+    # Build structured result
     chips_data = {}
     for chip in TARGET_CHIPS:
         price = prices.get(chip)
         chips_data[chip] = {
             "price_usd_per_hour": price,
-            "status": sanity_check(chip, price),
         }
 
     return {
