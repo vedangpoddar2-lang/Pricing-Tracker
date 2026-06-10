@@ -1,4 +1,4 @@
 groq
 playwright
 python-dotenv
-asyncio
+browserbase

@@ -10,15 +10,14 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg: #090a0f;
-      --surface: #12141c;
-      --surface-hover: #191c27;
-      --border: #1f222f;
-      --border-glow: #3b82f6;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #3b82f6;
-      --accent-gradient: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -46,15 +45,11 @@
     h1 {
       font-size: 2.2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text);
       letter-spacing: -0.02em;
     }
     h1 span {
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent);
     }
     .subtitle {
       color: var(--muted);
@@ -85,14 +80,14 @@
     .card-wrap {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       overflow: hidden;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .card-wrap:hover {
-      border-color: #2e3448;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+      border-color: var(--border-hover);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
     /* Table */
     .table-wrap {
@@ -108,7 +103,7 @@
       border-bottom: 1px solid var(--border);
     }
     th {
-      background: #0d0f15;
+      background: #f8fafc;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--muted);
@@ -129,7 +124,7 @@
       display: inline-block;
     }
     .provider a:hover {
-      color: #60a5fa;
+      color: var(--accent);
     }
     .price {
       font-variant-numeric: tabular-nums;
@@ -137,7 +132,7 @@
       font-size: 1.05rem;
     }
     .na {
-      color: rgba(148, 163, 184, 0.3);
+      color: rgba(71, 85, 105, 0.3);
       font-weight: 400;
     }
     .chip-badge {
@@ -146,7 +141,6 @@
       border-radius: 6px;
       font-size: 0.72rem;
       font-weight: 700;
-      color: #06080f;
       letter-spacing: 0.02em;
     }
     .flag {
@@ -162,7 +156,7 @@
       padding: 1.5rem 2rem;
     }
     .all-good {
-      color: #34d399;
+      color: #059669;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -173,7 +167,7 @@
     }
     .flagged-list li {
       margin-bottom: 0.5rem;
-      color: #f59e0b;
+      color: #d97706;
     }
     /* Footer */
     footer {
@@ -205,13 +199,13 @@
     </div>
     <div class="last-updated">
       Last updated
-      <strong>June 10, 2026 at 03:46 UTC</strong>
+      <strong>June 10, 2026 at 03:59 UTC</strong>
     </div>
   </header>
 
   <p class="section-title">Current Prices (USD / hr)</p>
   <div class="card-wrap table-wrap">
-    <table><thead><tr><th>Provider</th><th><span class="chip-badge" style="background:#4f8ef7">H100 SXM</span></th><th><span class="chip-badge" style="background:#f7a84f">H200 SXM</span></th><th><span class="chip-badge" style="background:#4ff7a0">B200 SXM</span></th><th><span class="chip-badge" style="background:#f74f6e">B300 SXM</span></th></tr></thead><tbody>
+    <table><thead><tr><th>Provider</th><th><span class="chip-badge" style="background:#eff6ff; color:#1e40af; border: 1px solid #bfdbfe">H100 SXM</span></th><th><span class="chip-badge" style="background:#fff7ed; color:#9a3412; border: 1px solid #ffedd5">H200 SXM</span></th><th><span class="chip-badge" style="background:#ecfdf5; color:#065f46; border: 1px solid #d1fae5">B200 SXM</span></th><th><span class="chip-badge" style="background:#fff1f2; color:#9f1239; border: 1px solid #ffe4e6">B300 SXM</span></th></tr></thead><tbody>
         <tr>
           <td class="provider">
             <a href="https://neysa.ai/pricing/" target="_blank">Neysa</a>
@@ -258,7 +252,7 @@
           <td class="provider">
             <a href="https://www.e2enetworks.com/pricing" target="_blank">E2E Networks</a>
           </td>
-          <td><span class="price">$2.60</span></td><td><span class="price">$3.12</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$2.60</span></td><td><span class="price">$3.13</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
         </tr></tbody></table>
   </div>
 
@@ -286,35 +280,35 @@
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["2026-06-10"],
-        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01], "borderColor": "#4f8ef7", "backgroundColor": "#4f8ef733", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12], "borderColor": "#f7a84f", "backgroundColor": "#f7a84f33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34], "borderColor": "#4ff7a0", "backgroundColor": "#4ff7a033", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [3.29], "borderColor": "#f74f6e", "backgroundColor": "#f74f6e33", "tension": 0.3, "spanGaps": true}],
+        labels: ["2026-06-10", "2026-06-10"],
+        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [3.29, 3.29], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
             labels: {
-              color: "#f8fafc",
+              color: "#0f172a",
               font: { family: "'Outfit', sans-serif", size: 12, weight: 500 }
             }
           }
         },
         scales: {
           x: {
-            ticks: { color: "#94a3b8", font: { family: "'Outfit', sans-serif" } },
-            grid: { color: "rgba(255, 255, 255, 0.03)" }
+            ticks: { color: "#475569", font: { family: "'Outfit', sans-serif" } },
+            grid: { color: "rgba(0, 0, 0, 0.05)" }
           },
           y: {
             ticks: {
-              color: "#94a3b8",
+              color: "#475569",
               font: { family: "'Outfit', sans-serif" },
               callback: v => "$" + v.toFixed(2)
             },
-            grid: { color: "rgba(255, 255, 255, 0.03)" },
+            grid: { color: "rgba(0, 0, 0, 0.05)" },
             title: {
               display: true,
               text: "USD / hr",
-              color: "#94a3b8",
+              color: "#475569",
               font: { family: "'Outfit', sans-serif", weight: 600 }
             }
           }
@@ -323,7 +317,7 @@
     });
   } else {
     document.getElementById("trendChart").parentElement.innerHTML =
-      "<p style='color:#94a3b8;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
+      "<p style='color:#64748b;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
   }
 </script>
 

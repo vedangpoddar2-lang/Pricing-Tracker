@@ -10,10 +10,16 @@ from datetime import datetime
 
 CHIPS = ["H100", "H200", "B200", "B300"]
 CHIP_COLORS = {
-    "H100": "#4f8ef7",
-    "H200": "#f7a84f",
-    "B200": "#4ff7a0",
-    "B300": "#f74f6e",
+    "H100": "#2563eb",  # Premium blue
+    "H200": "#ea580c",  # Orange
+    "B200": "#16a34a",  # Green
+    "B300": "#e11d48",  # Rose
+}
+CHIP_STYLES = {
+    "H100": {"bg": "#eff6ff", "text": "#1e40af", "border": "#bfdbfe"},
+    "H200": {"bg": "#fff7ed", "text": "#9a3412", "border": "#ffedd5"},
+    "B200": {"bg": "#ecfdf5", "text": "#065f46", "border": "#d1fae5"},
+    "B300": {"bg": "#fff1f2", "text": "#9f1239", "border": "#ffe4e6"},
 }
 
 
@@ -39,7 +45,7 @@ def build_price_table(latest):
 
     # Header row
     header_chips = "".join(
-        f'<th><span class="chip-badge" style="background:{CHIP_COLORS[c]}">{c} SXM</span></th>'
+        f'<th><span class="chip-badge" style="background:{CHIP_STYLES[c]["bg"]}; color:{CHIP_STYLES[c]["text"]}; border: 1px solid {CHIP_STYLES[c]["border"]}">{c} SXM</span></th>'
         for c in CHIPS
     )
     header = f"<tr><th>Provider</th>{header_chips}</tr>"
@@ -138,15 +144,14 @@ def generate_html(latest, history):
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {{
-      --bg: #090a0f;
-      --surface: #12141c;
-      --surface-hover: #191c27;
-      --border: #1f222f;
-      --border-glow: #3b82f6;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #3b82f6;
-      --accent-gradient: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #2563eb;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
@@ -174,15 +179,11 @@ def generate_html(latest, history):
     h1 {{
       font-size: 2.2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text);
       letter-spacing: -0.02em;
     }}
     h1 span {{
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent);
     }}
     .subtitle {{
       color: var(--muted);
@@ -213,14 +214,14 @@ def generate_html(latest, history):
     .card-wrap {{
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       overflow: hidden;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }}
     .card-wrap:hover {{
-      border-color: #2e3448;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+      border-color: var(--border-hover);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }}
     /* Table */
     .table-wrap {{
@@ -236,7 +237,7 @@ def generate_html(latest, history):
       border-bottom: 1px solid var(--border);
     }}
     th {{
-      background: #0d0f15;
+      background: #f8fafc;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--muted);
@@ -257,7 +258,7 @@ def generate_html(latest, history):
       display: inline-block;
     }}
     .provider a:hover {{
-      color: #60a5fa;
+      color: var(--accent);
     }}
     .price {{
       font-variant-numeric: tabular-nums;
@@ -265,7 +266,7 @@ def generate_html(latest, history):
       font-size: 1.05rem;
     }}
     .na {{
-      color: rgba(148, 163, 184, 0.3);
+      color: rgba(71, 85, 105, 0.3);
       font-weight: 400;
     }}
     .chip-badge {{
@@ -274,7 +275,6 @@ def generate_html(latest, history):
       border-radius: 6px;
       font-size: 0.72rem;
       font-weight: 700;
-      color: #06080f;
       letter-spacing: 0.02em;
     }}
     .flag {{
@@ -290,7 +290,7 @@ def generate_html(latest, history):
       padding: 1.5rem 2rem;
     }}
     .all-good {{
-      color: #34d399;
+      color: #059669;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -301,7 +301,7 @@ def generate_html(latest, history):
     }}
     .flagged-list li {{
       margin-bottom: 0.5rem;
-      color: #f59e0b;
+      color: #d97706;
     }}
     /* Footer */
     footer {{
@@ -374,27 +374,27 @@ def generate_html(latest, history):
         plugins: {{
           legend: {{
             labels: {{
-              color: "#f8fafc",
+              color: "#0f172a",
               font: {{ family: "'Outfit', sans-serif", size: 12, weight: 500 }}
             }}
           }}
         }},
         scales: {{
           x: {{
-            ticks: {{ color: "#94a3b8", font: {{ family: "'Outfit', sans-serif" }} }},
-            grid: {{ color: "rgba(255, 255, 255, 0.03)" }}
+            ticks: {{ color: "#475569", font: {{ family: "'Outfit', sans-serif" }} }},
+            grid: {{ color: "rgba(0, 0, 0, 0.05)" }}
           }},
           y: {{
             ticks: {{
-              color: "#94a3b8",
+              color: "#475569",
               font: {{ family: "'Outfit', sans-serif" }},
               callback: v => "$" + v.toFixed(2)
             }},
-            grid: {{ color: "rgba(255, 255, 255, 0.03)" }},
+            grid: {{ color: "rgba(0, 0, 0, 0.05)" }},
             title: {{
               display: true,
               text: "USD / hr",
-              color: "#94a3b8",
+              color: "#475569",
               font: {{ family: "'Outfit', sans-serif", weight: 600 }}
             }}
           }}
@@ -403,7 +403,7 @@ def generate_html(latest, history):
     }});
   }} else {{
     document.getElementById("trendChart").parentElement.innerHTML =
-      "<p style='color:#94a3b8;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
+      "<p style='color:#64748b;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
   }}
 </script>
 

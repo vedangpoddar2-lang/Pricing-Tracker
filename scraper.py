@@ -265,9 +265,22 @@ async def scrape_site(site: dict) -> dict:
 
     try:
         async with async_playwright() as p:
-            # Launch headless browser
-            browser = await p.chromium.launch(headless=True)
-            context = await browser.new_page()
+            # Check if Browserbase API key is available
+            use_browserbase = bool(os.environ.get("BROWSERBASE_API_KEY"))
+            
+            if use_browserbase:
+                print("Connecting to Browserbase cloud browser...")
+                from browserbase import Browserbase
+                bb = Browserbase(api_key=os.environ["BROWSERBASE_API_KEY"])
+                # Create session (run in executor since it's synchronous)
+                session = await asyncio.to_thread(bb.sessions.create)
+                browser = await p.chromium.connect_over_cdp(session.connect_url)
+                # Browserbase remote sessions have a context and page pre-opened
+                context = browser.contexts[0].pages[0]
+            else:
+                print("Using local Chromium browser...")
+                browser = await p.chromium.launch(headless=True)
+                context = await browser.new_page()
 
             # Navigate to the page
             print(f"Navigating to {site['url']}...")
@@ -282,6 +295,20 @@ async def scrape_site(site: dict) -> dict:
 
             # Extract page text
             text_content = await context.evaluate("document.body.innerText")
+
+            # Handle dynamic tab clicking if selectors are defined
+            if "selectors_to_click" in site:
+                for selector in site["selectors_to_click"]:
+                    print(f"  Clicking tab selector: {selector}...")
+                    try:
+                        await context.click(selector, timeout=5000)
+                        await context.wait_for_timeout(1500)
+                        tab_text = await context.evaluate("document.body.innerText")
+                        # Accumulate all tab content separated by markers
+                        text_content += f"\n\n--- TAB CONTENT ({selector}) ---\n\n" + tab_text
+                    except Exception as click_err:
+                        print(f"  Click warning for {selector}: {click_err}")
+
             await browser.close()
 
             # Clean text to save tokens
