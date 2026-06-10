@@ -46,7 +46,8 @@ def format_price(val, chip, medians):
             is_anomaly = True
 
     flag = ' <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span>' if is_anomaly else ""
-    return f'<span class="price">${val:.2f}</span>{flag}'
+    price_class = "price outlier" if is_anomaly else "price"
+    return f'<span class="{price_class}">${val:.2f}</span>{flag}'
 
 
 def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averages, all_medians, all_averages):
@@ -227,8 +228,21 @@ def generate_html(latest, history):
     int_sites = [site for site in latest if site["site_id"] not in ["neysa", "e2e"]]
     ind_sites = [site for site in latest if site["site_id"] in ["neysa", "e2e"]]
 
-    # Helper function to calculate stats
-    def calc_stats(sites):
+    # 1. Calculate overall medians first (using all available prices, no filtering)
+    all_prices_by_chip = {c: [] for c in CHIPS}
+    for site in latest:
+        for c in CHIPS:
+            val = site["chips"].get(c, {}).get("price_usd_per_hour")
+            if val is not None:
+                all_prices_by_chip[c].append(val)
+    
+    all_medians = {}
+    for c in CHIPS:
+        p_list = all_prices_by_chip[c]
+        all_medians[c] = statistics.median(p_list) if p_list else None
+
+    # Helper function to calculate stats for a group of sites
+    def calc_group_stats(sites, medians_ref):
         prices_by_chip = {c: [] for c in CHIPS}
         for site in sites:
             for c in CHIPS:
@@ -241,16 +255,28 @@ def generate_html(latest, history):
         for c in CHIPS:
             p_list = prices_by_chip[c]
             if p_list:
+                # Group median (no filtering)
                 meds[c] = statistics.median(p_list)
-                avgs[c] = statistics.mean(p_list)
+                
+                # Exclude pricing anomalies (>50% away from the overall median) for the average
+                ref_med = medians_ref.get(c)
+                if ref_med is not None and ref_med > 0:
+                    filtered_p = [p for p in p_list if 0.5 * ref_med <= p <= 1.5 * ref_med]
+                else:
+                    filtered_p = p_list
+                
+                if filtered_p:
+                    avgs[c] = statistics.mean(filtered_p)
+                else:
+                    avgs[c] = None
             else:
                 meds[c] = None
                 avgs[c] = None
         return meds, avgs
 
-    int_medians, int_averages = calc_stats(int_sites)
-    ind_medians, ind_averages = calc_stats(ind_sites)
-    all_medians, all_averages = calc_stats(latest)
+    int_medians, int_averages = calc_group_stats(int_sites, all_medians)
+    ind_medians, ind_averages = calc_group_stats(ind_sites, all_medians)
+    _, all_averages = calc_group_stats(latest, all_medians)
 
     table_html = build_price_table(
         latest, 
@@ -490,7 +516,10 @@ def generate_html(latest, history):
     }}
     /* Chart */
     .chart-wrap {{
-      padding: 2rem;
+      position: relative;
+      padding: 1.5rem;
+      height: 320px;
+      width: 100%;
     }}
     /* Sanity section */
     .sanity-wrap {{
@@ -508,7 +537,18 @@ def generate_html(latest, history):
     }}
     .flagged-list li {{
       margin-bottom: 0.5rem;
-      color: #d97706;
+      color: #dc2626;
+    }}
+    .price.outlier {{
+      color: #dc2626;
+      font-weight: 700;
+    }}
+    .table-note {{
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      font-style: italic;
+      line-height: 1.45;
     }}
     /* Footer */
     footer {{
@@ -551,15 +591,16 @@ def generate_html(latest, history):
   <div class="card-wrap table-wrap">
     {table_html}
   </div>
-
-  <p class="section-title">Price Trends — Lowest Available per Chip</p>
-  <div class="card-wrap chart-wrap">
-    <canvas id="trendChart" height="100"></canvas>
-  </div>
+  <p class="table-note">* Note: Averages (but not medians) exclude pricing anomalies that are more than 50% above or below the overall median. Outliers are highlighted in red.</p>
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
     {flagged_html}
+  </div>
+
+  <p class="section-title">Price Trends — Lowest Available per Chip</p>
+  <div class="card-wrap chart-wrap">
+    <canvas id="trendChart"></canvas>
   </div>
 
   <footer>
@@ -623,23 +664,24 @@ def generate_html(latest, history):
       }},
       options: {{
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {{
           legend: {{
             labels: {{
               color: "#0f172a",
-              font: {{ family: "'Outfit', sans-serif", size: 12, weight: 500 }}
+              font: {{ family: "'Inter', sans-serif", size: 12, weight: 500 }}
             }}
           }}
         }},
         scales: {{
           x: {{
-            ticks: {{ color: "#475569", font: {{ family: "'Outfit', sans-serif" }} }},
+            ticks: {{ color: "#475569", font: {{ family: "'Inter', sans-serif" }} }},
             grid: {{ color: "rgba(0, 0, 0, 0.05)" }}
           }},
           y: {{
             ticks: {{
               color: "#475569",
-              font: {{ family: "'Outfit', sans-serif" }},
+              font: {{ family: "'Inter', sans-serif" }},
               callback: v => "$" + v.toFixed(2)
             }},
             grid: {{ color: "rgba(0, 0, 0, 0.05)" }},
@@ -647,7 +689,7 @@ def generate_html(latest, history):
               display: true,
               text: "USD / hr",
               color: "#475569",
-              font: {{ family: "'Outfit', sans-serif", weight: 600 }}
+              font: {{ family: "'Inter', sans-serif", weight: 600 }}
             }}
           }}
         }}

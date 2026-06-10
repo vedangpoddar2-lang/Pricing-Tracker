@@ -224,7 +224,10 @@
     }
     /* Chart */
     .chart-wrap {
-      padding: 2rem;
+      position: relative;
+      padding: 1.5rem;
+      height: 320px;
+      width: 100%;
     }
     /* Sanity section */
     .sanity-wrap {
@@ -242,7 +245,18 @@
     }
     .flagged-list li {
       margin-bottom: 0.5rem;
-      color: #d97706;
+      color: #dc2626;
+    }
+    .price.outlier {
+      color: #dc2626;
+      font-weight: 700;
+    }
+    .table-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      font-style: italic;
+      line-height: 1.45;
     }
     /* Footer */
     footer {
@@ -300,7 +314,7 @@
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="price">$5.49</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$6.79</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
+          <td><span class="price outlier">$5.49</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price outlier">$6.79</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -318,11 +332,11 @@
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/" target="_blank">Spheron</a>
           </td>
-          <td><span class="price">$1.43</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$3.31</span></td><td><span class="price">$2.74</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td>
+          <td><span class="price outlier">$1.43</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$3.31</span></td><td><span class="price outlier">$2.74</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price outlier">$3.29</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td>
         </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Average</strong></td>
-      <td><strong>$3.55</strong></td><td><strong>$4.84</strong></td><td><strong>$6.88</strong></td><td><strong>$6.21</strong></td>
+      <td><strong>$3.60</strong></td><td><strong>$4.35</strong></td><td><strong>$7.71</strong></td><td><strong>$7.67</strong></td>
     </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Median</strong></td>
@@ -350,22 +364,23 @@
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Average (All)</strong></td>
-      <td><strong>$3.57</strong></td><td><strong>$4.63</strong></td><td><strong>$6.83</strong></td><td><strong>$6.21</strong></td>
+      <td><strong>$3.61</strong></td><td><strong>$4.27</strong></td><td><strong>$7.51</strong></td><td><strong>$7.67</strong></td>
     </tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Median (All)</strong></td>
       <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.69</strong></td><td><strong>$7.50</strong></td>
     </tr></tbody></table>
   </div>
-
-  <p class="section-title">Price Trends — Lowest Available per Chip</p>
-  <div class="card-wrap chart-wrap">
-    <canvas id="trendChart" height="100"></canvas>
-  </div>
+  <p class="table-note">* Note: Averages (but not medians) exclude pricing anomalies that are more than 50% above or below the overall median. Outliers are highlighted in red.</p>
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
     <ul class='flagged-list'><li><strong>Together AI</strong> — H100 SXM: $5.49/hr (unusual rate: 153.8% of median $3.57/hr)</li><li><strong>Together AI</strong> — H200 SXM: $6.79/hr (unusual rate: 150.9% of median $4.50/hr)</li><li><strong>Spheron</strong> — H100 SXM: $1.43/hr (unusual rate: 40.1% of median $3.57/hr)</li><li><strong>Spheron</strong> — B200 SXM: $2.74/hr (unusual rate: 41.0% of median $6.69/hr)</li><li><strong>Spheron</strong> — B300 SXM: $3.29/hr (unusual rate: 43.9% of median $7.50/hr)</li></ul>
+  </div>
+
+  <p class="section-title">Price Trends — Lowest Available per Chip</p>
+  <div class="card-wrap chart-wrap">
+    <canvas id="trendChart"></canvas>
   </div>
 
   <footer>
@@ -430,23 +445,24 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             labels: {
               color: "#0f172a",
-              font: { family: "'Outfit', sans-serif", size: 12, weight: 500 }
+              font: { family: "'Inter', sans-serif", size: 12, weight: 500 }
             }
           }
         },
         scales: {
           x: {
-            ticks: { color: "#475569", font: { family: "'Outfit', sans-serif" } },
+            ticks: { color: "#475569", font: { family: "'Inter', sans-serif" } },
             grid: { color: "rgba(0, 0, 0, 0.05)" }
           },
           y: {
             ticks: {
               color: "#475569",
-              font: { family: "'Outfit', sans-serif" },
+              font: { family: "'Inter', sans-serif" },
               callback: v => "$" + v.toFixed(2)
             },
             grid: { color: "rgba(0, 0, 0, 0.05)" },
@@ -454,7 +470,7 @@
               display: true,
               text: "USD / hr",
               color: "#475569",
-              font: { family: "'Outfit', sans-serif", weight: 600 }
+              font: { family: "'Inter', sans-serif", weight: 600 }
             }
           }
         }
