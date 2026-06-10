@@ -37,7 +37,7 @@ def format_price(val, chip, medians):
     if val is None:
         return '<span class="na">—</span>'
     
-    # Flag dynamically if price is >50% away from the median
+    # Flag dynamically if price is >50% away from the all-player median
     median_val = medians.get(chip)
     is_anomaly = False
     if median_val is not None and median_val > 0:
@@ -45,13 +45,17 @@ def format_price(val, chip, medians):
         if ratio < 0.5 or ratio > 1.5:
             is_anomaly = True
 
-    flag = ' <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span>' if is_anomaly else ""
+    flag = ' <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span>' if is_anomaly else ""
     return f'<span class="price">${val:.2f}</span>{flag}'
 
 
-def build_price_table(latest, medians, averages):
+def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averages, all_medians, all_averages):
     if not latest:
         return "<p>No data yet. Run the scraper first.</p>"
+
+    # Separate providers
+    int_sites = [site for site in latest if site["site_id"] not in ["neysa", "e2e"]]
+    ind_sites = [site for site in latest if site["site_id"] in ["neysa", "e2e"]]
 
     # Header row
     header_chips = "".join(
@@ -61,11 +65,14 @@ def build_price_table(latest, medians, averages):
     header = f"<tr><th>Provider</th>{header_chips}</tr>"
 
     rows = ""
-    for site in latest:
+
+    # 1. International Providers Section
+    rows += f"""<tr class="group-header-row"><td colspan="{len(CHIPS) + 1}"><strong>International Providers</strong></td></tr>"""
+    for site in int_sites:
         cells = ""
         for chip in CHIPS:
             price = site["chips"].get(chip, {}).get("price_usd_per_hour")
-            cells += f"<td>{format_price(price, chip, medians)}</td>"
+            cells += f"<td>{format_price(price, chip, all_medians)}</td>"
         rows += f"""
         <tr>
           <td class="provider">
@@ -74,29 +81,79 @@ def build_price_table(latest, medians, averages):
           {cells}
         </tr>"""
 
-    # Add Average Row
-    avg_cells = "".join(
-        f"<td><strong>${averages[c]:.2f}</strong></td>" if averages[c] is not None else "<td><strong>—</strong></td>"
+    # 2. International Averages & Medians
+    int_avg_cells = "".join(
+        f"<td><strong>${int_averages[c]:.2f}</strong></td>" if int_averages[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    int_med_cells = "".join(
+        f"<td><strong>${int_medians[c]:.2f}</strong></td>" if int_medians[c] is not None else "<td><strong>—</strong></td>"
         for c in CHIPS
     )
     rows += f"""
-    <tr class="summary-row">
-      <td class="provider"><strong>Average</strong></td>
-      {avg_cells}
+    <tr class="summary-row int-summary-row">
+      <td class="provider"><strong>International Average</strong></td>
+      {int_avg_cells}
+    </tr>
+    <tr class="summary-row int-summary-row">
+      <td class="provider"><strong>International Median</strong></td>
+      {int_med_cells}
     </tr>"""
 
-    # Add Median Row
-    med_cells = "".join(
-        f"<td><strong>${medians[c]:.2f}</strong></td>" if medians[c] is not None else "<td><strong>—</strong></td>"
+    # 3. Indian Providers Section
+    rows += f"""<tr class="group-header-row"><td colspan="{len(CHIPS) + 1}"><strong>Indian Providers</strong></td></tr>"""
+    for site in ind_sites:
+        cells = ""
+        for chip in CHIPS:
+            price = site["chips"].get(chip, {}).get("price_usd_per_hour")
+            cells += f"<td>{format_price(price, chip, all_medians)}</td>"
+        rows += f"""
+        <tr>
+          <td class="provider">
+            <a href="{site['url']}" target="_blank">{site['site_name']}</a>
+          </td>
+          {cells}
+        </tr>"""
+
+    # 4. Indian Averages & Medians (Soft Amber background)
+    ind_avg_cells = "".join(
+        f"<td><strong>${ind_averages[c]:.2f}</strong></td>" if ind_averages[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    ind_med_cells = "".join(
+        f"<td><strong>${ind_medians[c]:.2f}</strong></td>" if ind_medians[c] is not None else "<td><strong>—</strong></td>"
         for c in CHIPS
     )
     rows += f"""
-    <tr class="summary-row">
-      <td class="provider"><strong>Median</strong></td>
-      {med_cells}
+    <tr class="summary-row ind-summary-row">
+      <td class="provider"><strong>Indian Average</strong></td>
+      {ind_avg_cells}
+    </tr>
+    <tr class="summary-row ind-summary-row">
+      <td class="provider"><strong>Indian Median</strong></td>
+      {ind_med_cells}
     </tr>"""
 
-    return f"<table><thead>{header}</thead><tbody>{rows}</tbody></table>"
+    # 5. Combined Total Averages & Medians (Distinct Blue background)
+    all_avg_cells = "".join(
+        f"<td><strong>${all_averages[c]:.2f}</strong></td>" if all_averages[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    all_med_cells = "".join(
+        f"<td><strong>${all_medians[c]:.2f}</strong></td>" if all_medians[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    rows += f"""
+    <tr class="summary-row all-summary-row">
+      <td class="provider"><strong>Total Average (All)</strong></td>
+      {all_avg_cells}
+    </tr>
+    <tr class="summary-row all-summary-row">
+      <td class="provider"><strong>Total Median (All)</strong></td>
+      {all_med_cells}
+    </tr>"""
+
+    return f'<table id="pricingTable"><thead>{header}</thead><tbody>{rows}</tbody></table>'
 
 
 def build_history_chart_data(history):
@@ -133,8 +190,12 @@ def get_last_updated(latest):
         return "Never"
     ts = latest[0].get("scraped_at", "")
     if ts:
+        from datetime import timezone, timedelta
         dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%B %d, %Y at %H:%M UTC")
+        # Convert to IST (UTC + 5:30)
+        ist_tz = timezone(timedelta(hours=5, minutes=30))
+        ist_dt = dt.astimezone(ist_tz)
+        return ist_dt.strftime("%B %d, %Y at %I:%M %p IST")
     return "Unknown"
 
 
@@ -158,29 +219,44 @@ def build_flagged_section(latest, medians):
 
 
 def generate_html(latest, history):
-    # Calculate medians and averages for each chip
-    chip_prices = {c: [] for c in CHIPS}
-    for site in latest:
+    # Separate providers
+    int_sites = [site for site in latest if site["site_id"] not in ["neysa", "e2e"]]
+    ind_sites = [site for site in latest if site["site_id"] in ["neysa", "e2e"]]
+
+    # Helper function to calculate stats
+    def calc_stats(sites):
+        prices_by_chip = {c: [] for c in CHIPS}
+        for site in sites:
+            for c in CHIPS:
+                val = site["chips"].get(c, {}).get("price_usd_per_hour")
+                if val is not None:
+                    prices_by_chip[c].append(val)
+        
+        meds = {}
+        avgs = {}
         for c in CHIPS:
-            val = site["chips"].get(c, {}).get("price_usd_per_hour")
-            if val is not None:
-                chip_prices[c].append(val)
+            p_list = prices_by_chip[c]
+            if p_list:
+                meds[c] = statistics.median(p_list)
+                avgs[c] = statistics.mean(p_list)
+            else:
+                meds[c] = None
+                avgs[c] = None
+        return meds, avgs
 
-    medians = {}
-    averages = {}
-    for c in CHIPS:
-        prices = chip_prices[c]
-        if prices:
-            medians[c] = statistics.median(prices)
-            averages[c] = statistics.mean(prices)
-        else:
-            medians[c] = None
-            averages[c] = None
+    int_medians, int_averages = calc_stats(int_sites)
+    ind_medians, ind_averages = calc_stats(ind_sites)
+    all_medians, all_averages = calc_stats(latest)
 
-    table_html = build_price_table(latest, medians, averages)
+    table_html = build_price_table(
+        latest, 
+        int_medians, int_averages, 
+        ind_medians, ind_averages, 
+        all_medians, all_averages
+    )
     labels_js, datasets_js = build_history_chart_data(history)
     last_updated = get_last_updated(latest)
-    flagged_html = build_flagged_section(latest, medians)
+    flagged_html = build_flagged_section(latest, all_medians)
 
     show_chart = "true" if history else "false"
 
@@ -301,12 +377,72 @@ def generate_html(latest, history):
     tr:hover td {{
       background-color: var(--surface-hover);
     }}
-    tr.summary-row td {{
+    tr.group-header-row td {{
       background-color: #f8fafc;
-      border-top: 2px solid var(--border);
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.8rem 1.5rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }}
-    tr.summary-row:hover td {{
-      background-color: #f1f5f9;
+    tr.summary-row td {{
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+    }}
+    tr.int-summary-row td {{
+      background-color: #fafafa;
+      color: #475569;
+    }}
+    tr.int-summary-row:hover td {{
+      background-color: #f4f4f5;
+    }}
+    tr.ind-summary-row td {{
+      background-color: #fffbeb;
+      color: #78350f;
+      border-top: 1px solid #fef3c7;
+    }}
+    tr.ind-summary-row:hover td {{
+      background-color: #fef3c7;
+    }}
+    tr.all-summary-row td {{
+      background-color: #eff6ff;
+      color: #1e40af;
+      font-weight: 700;
+      border-top: 2px solid #bfdbfe;
+      border-bottom: 2px solid #bfdbfe;
+    }}
+    tr.all-summary-row:hover td {{
+      background-color: #dbeafe;
+    }}
+    .table-header-actions {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 3rem 0 1rem;
+    }}
+    .btn-copy {{
+      background-color: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }}
+    .btn-copy:hover {{
+      background-color: var(--surface-hover);
+      border-color: var(--border-hover);
+    }}
+    .btn-copy.btn-success {{
+      background-color: #059669;
+      color: #ffffff;
+      border-color: #059669;
     }}
     .provider a {{
       color: var(--text);
@@ -396,7 +532,10 @@ def generate_html(latest, history):
     </div>
   </header>
 
-  <p class="section-title">Current Prices (USD / hr)</p>
+  <div class="table-header-actions">
+    <p class="section-title">Current Prices (USD / hr)</p>
+    <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
+  </div>
   <div class="card-wrap table-wrap">
     {table_html}
   </div>
@@ -419,6 +558,48 @@ def generate_html(latest, history):
 </div>
 
 <script>
+  function copyTableToClipboard() {{
+    const table = document.getElementById("pricingTable");
+    if (!table) return;
+
+    let tsv = "";
+    for (let row of table.rows) {{
+      let rowData = [];
+      for (let cell of row.cells) {{
+        let text = cell.innerText.replace(/⚠️/g, "").trim();
+        rowData.push(text);
+      }}
+      tsv += rowData.join("\t") + "\n";
+    }}
+
+    const tableHtml = table.outerHTML;
+    const textBlob = new Blob([tsv], {{ type: 'text/plain' }});
+    const htmlBlob = new Blob([tableHtml], {{ type: 'text/html' }});
+
+    const data = [new ClipboardItem({{
+      'text/plain': textBlob,
+      'text/html': htmlBlob
+    }})];
+
+    navigator.clipboard.write(data).then(() => {{
+      const btn = document.getElementById("copyTableBtn");
+      const originalText = btn.innerText;
+      btn.innerText = "✓ Copied!";
+      btn.classList.add("btn-success");
+      setTimeout(() => {{
+        btn.innerText = originalText;
+        btn.classList.remove("btn-success");
+      }}, 2000);
+    }}).catch(err => {{
+      console.error("Failed to copy table: ", err);
+      navigator.clipboard.writeText(tsv).then(() => {{
+        const btn = document.getElementById("copyTableBtn");
+        btn.innerText = "✓ Copied (Text)!";
+        setTimeout(() => {{ btn.innerText = "Copy to Excel"; }}, 2000);
+      }});
+    }});
+  }}
+
   const showChart = {show_chart};
   if (showChart) {{
     const ctx = document.getElementById("trendChart").getContext("2d");

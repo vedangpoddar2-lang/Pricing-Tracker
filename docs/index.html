@@ -115,12 +115,72 @@
     tr:hover td {
       background-color: var(--surface-hover);
     }
-    tr.summary-row td {
+    tr.group-header-row td {
       background-color: #f8fafc;
-      border-top: 2px solid var(--border);
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.8rem 1.5rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
-    tr.summary-row:hover td {
-      background-color: #f1f5f9;
+    tr.summary-row td {
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+    }
+    tr.int-summary-row td {
+      background-color: #fafafa;
+      color: #475569;
+    }
+    tr.int-summary-row:hover td {
+      background-color: #f4f4f5;
+    }
+    tr.ind-summary-row td {
+      background-color: #fffbeb;
+      color: #78350f;
+      border-top: 1px solid #fef3c7;
+    }
+    tr.ind-summary-row:hover td {
+      background-color: #fef3c7;
+    }
+    tr.all-summary-row td {
+      background-color: #eff6ff;
+      color: #1e40af;
+      font-weight: 700;
+      border-top: 2px solid #bfdbfe;
+      border-bottom: 2px solid #bfdbfe;
+    }
+    tr.all-summary-row:hover td {
+      background-color: #dbeafe;
+    }
+    .table-header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 3rem 0 1rem;
+    }
+    .btn-copy {
+      background-color: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .btn-copy:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--border-hover);
+    }
+    .btn-copy.btn-success {
+      background-color: #059669;
+      color: #ffffff;
+      border-color: #059669;
     }
     .provider a {
       color: var(--text);
@@ -206,19 +266,16 @@
     </div>
     <div class="last-updated">
       Last updated
-      <strong>June 10, 2026 at 03:59 UTC</strong>
+      <strong>June 10, 2026 at 09:29 AM IST</strong>
     </div>
   </header>
 
-  <p class="section-title">Current Prices (USD / hr)</p>
+  <div class="table-header-actions">
+    <p class="section-title">Current Prices (USD / hr)</p>
+    <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
+  </div>
   <div class="card-wrap table-wrap">
-    <table><thead><tr><th>Provider</th><th><span class="chip-badge" style="background:#eff6ff; color:#1e40af; border: 1px solid #bfdbfe">H100 SXM</span></th><th><span class="chip-badge" style="background:#fff7ed; color:#9a3412; border: 1px solid #ffedd5">H200 SXM</span></th><th><span class="chip-badge" style="background:#ecfdf5; color:#065f46; border: 1px solid #d1fae5">B200 SXM</span></th><th><span class="chip-badge" style="background:#fff1f2; color:#9f1239; border: 1px solid #ffe4e6">B300 SXM</span></th></tr></thead><tbody>
-        <tr>
-          <td class="provider">
-            <a href="https://neysa.ai/pricing/" target="_blank">Neysa</a>
-          </td>
-          <td><span class="price">$4.39</span></td><td><span class="price">$4.73</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
-        </tr>
+    <table id="pricingTable"><thead><tr><th>Provider</th><th><span class="chip-badge" style="background:#eff6ff; color:#1e40af; border: 1px solid #bfdbfe">H100 SXM</span></th><th><span class="chip-badge" style="background:#fff7ed; color:#9a3412; border: 1px solid #ffedd5">H200 SXM</span></th><th><span class="chip-badge" style="background:#ecfdf5; color:#065f46; border: 1px solid #d1fae5">B200 SXM</span></th><th><span class="chip-badge" style="background:#fff1f2; color:#9f1239; border: 1px solid #ffe4e6">B300 SXM</span></th></tr></thead><tbody><tr class="group-header-row"><td colspan="5"><strong>International Providers</strong></td></tr>
         <tr>
           <td class="provider">
             <a href="https://verda.com/products#H100" target="_blank">Verda</a>
@@ -235,7 +292,7 @@
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="price">$5.49</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td><td><span class="price">$6.79</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$5.49</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$6.79</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -253,7 +310,21 @@
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/" target="_blank">Spheron</a>
           </td>
-          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td>
+          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td>
+        </tr>
+    <tr class="summary-row int-summary-row">
+      <td class="provider"><strong>International Average</strong></td>
+      <td><strong>$3.65</strong></td><td><strong>$4.84</strong></td><td><strong>$7.31</strong></td><td><strong>$6.21</strong></td>
+    </tr>
+    <tr class="summary-row int-summary-row">
+      <td class="provider"><strong>International Median</strong></td>
+      <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.92</strong></td><td><strong>$7.50</strong></td>
+    </tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
+        <tr>
+          <td class="provider">
+            <a href="https://neysa.ai/pricing/" target="_blank">Neysa</a>
+          </td>
+          <td><span class="price">$4.39</span></td><td><span class="price">$4.73</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -261,12 +332,20 @@
           </td>
           <td><span class="price">$2.60</span></td><td><span class="price">$3.13</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
         </tr>
-    <tr class="summary-row">
-      <td class="provider"><strong>Average</strong></td>
+    <tr class="summary-row ind-summary-row">
+      <td class="provider"><strong>Indian Average</strong></td>
+      <td><strong>$3.50</strong></td><td><strong>$3.93</strong></td><td><strong>$6.50</strong></td><td><strong>—</strong></td>
+    </tr>
+    <tr class="summary-row ind-summary-row">
+      <td class="provider"><strong>Indian Median</strong></td>
+      <td><strong>$3.50</strong></td><td><strong>$3.93</strong></td><td><strong>$6.50</strong></td><td><strong>—</strong></td>
+    </tr>
+    <tr class="summary-row all-summary-row">
+      <td class="provider"><strong>Total Average (All)</strong></td>
       <td><strong>$3.61</strong></td><td><strong>$4.58</strong></td><td><strong>$7.20</strong></td><td><strong>$6.21</strong></td>
     </tr>
-    <tr class="summary-row">
-      <td class="provider"><strong>Median</strong></td>
+    <tr class="summary-row all-summary-row">
+      <td class="provider"><strong>Total Median (All)</strong></td>
       <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.69</strong></td><td><strong>$7.50</strong></td>
     </tr></tbody></table>
   </div>
@@ -289,6 +368,49 @@
 </div>
 
 <script>
+  function copyTableToClipboard() {
+    const table = document.getElementById("pricingTable");
+    if (!table) return;
+
+    let tsv = "";
+    for (let row of table.rows) {
+      let rowData = [];
+      for (let cell of row.cells) {
+        let text = cell.innerText.replace(/⚠️/g, "").trim();
+        rowData.push(text);
+      }
+      tsv += rowData.join("	") + "
+";
+    }
+
+    const tableHtml = table.outerHTML;
+    const textBlob = new Blob([tsv], { type: 'text/plain' });
+    const htmlBlob = new Blob([tableHtml], { type: 'text/html' });
+
+    const data = [new ClipboardItem({
+      'text/plain': textBlob,
+      'text/html': htmlBlob
+    })];
+
+    navigator.clipboard.write(data).then(() => {
+      const btn = document.getElementById("copyTableBtn");
+      const originalText = btn.innerText;
+      btn.innerText = "✓ Copied!";
+      btn.classList.add("btn-success");
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.classList.remove("btn-success");
+      }, 2000);
+    }).catch(err => {
+      console.error("Failed to copy table: ", err);
+      navigator.clipboard.writeText(tsv).then(() => {
+        const btn = document.getElementById("copyTableBtn");
+        btn.innerText = "✓ Copied (Text)!";
+        setTimeout(() => { btn.innerText = "Copy to Excel"; }, 2000);
+      });
+    });
+  }
+
   const showChart = true;
   if (showChart) {
     const ctx = document.getElementById("trendChart").getContext("2d");
