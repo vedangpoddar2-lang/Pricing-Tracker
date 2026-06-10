@@ -34,40 +34,29 @@
       margin: 0 auto;
     }
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+      margin-bottom: 2.5rem;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 2rem;
+      padding-bottom: 1.5rem;
     }
     h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-size: 1.5rem;
+      font-weight: 600;
       color: var(--text);
-      letter-spacing: -0.02em;
-    }
-    h1 span {
-      color: var(--accent);
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
     }
     .subtitle {
       color: var(--muted);
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
+      font-size: 0.88rem;
       font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
-    .last-updated {
-      text-align: right;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    .last-updated strong {
-      color: var(--text);
-      font-size: 0.95rem;
-      display: block;
-      margin-top: 0.25rem;
+    .meta-divider {
+      color: var(--border);
+      font-weight: 300;
     }
     .section-title {
       font-size: 0.85rem;
@@ -104,12 +93,11 @@
       border-bottom: 1px solid var(--border);
     }
     th {
-      background: #f8fafc;
-      font-size: 0.8rem;
+      background: #fdfdfc;
+      font-size: 0.92rem;
       font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
     }
     tr:last-child td { border-bottom: none; }
     tr { transition: background-color 0.2s ease; }
@@ -134,7 +122,8 @@
       border: none;
     }
     tr.summary-row td {
-      font-weight: 600;
+      font-weight: 500;
+      font-size: 0.92rem;
       border-top: 1px solid var(--border);
     }
     tr.int-summary-row td {
@@ -156,7 +145,7 @@
     tr.all-summary-row td {
       background-color: #eff6ff;
       color: #1e40af;
-      font-weight: 700;
+      font-weight: 600;
       border-top: 2px solid #bfdbfe;
       border-bottom: 2px solid #bfdbfe;
     }
@@ -203,20 +192,12 @@
     }
     .price {
       font-variant-numeric: tabular-nums;
-      font-weight: 600;
-      font-size: 1.05rem;
+      font-weight: 400;
+      font-size: 0.92rem;
     }
     .na {
       color: rgba(71, 85, 105, 0.3);
       font-weight: 400;
-    }
-    .chip-badge {
-      display: inline-block;
-      padding: 0.25em 0.75em;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
     }
     .flag {
       cursor: help;
@@ -282,13 +263,11 @@
 
 <div class="container">
   <header>
-    <div>
-      <h1>GPU-as-a-Service <span>Pricing Tracker</span></h1>
-      <div class="subtitle">NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</div>
-    </div>
-    <div class="last-updated">
-      Last updated
-      <strong>June 10, 2026 at 10:22 AM IST</strong>
+    <h1>GPU-as-a-Service Pricing Tracker</h1>
+    <div class="subtitle">
+      <span>NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</span>
+      <span class="meta-divider">|</span>
+      <span>Last updated: June 10, 2026 at 10:22 AM IST</span>
     </div>
   </header>
 
@@ -297,7 +276,7 @@
     <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
   </div>
   <div class="card-wrap table-wrap">
-    <table id="pricingTable"><thead><tr><th>Provider</th><th><span class="chip-badge" style="background:#eff6ff; color:#1e40af; border: 1px solid #bfdbfe">H100 SXM</span></th><th><span class="chip-badge" style="background:#fff7ed; color:#9a3412; border: 1px solid #ffedd5">H200 SXM</span></th><th><span class="chip-badge" style="background:#ecfdf5; color:#065f46; border: 1px solid #d1fae5">B200 SXM</span></th><th><span class="chip-badge" style="background:#fff1f2; color:#9f1239; border: 1px solid #ffe4e6">B300 SXM</span></th></tr></thead><tbody><tr class="group-header-row"><td colspan="5"><strong>International Providers</strong></td></tr>
+    <table id="pricingTable"><thead><tr><th>Provider</th><th>H100 SXM</th><th>H200 SXM</th><th>B200 SXM</th><th>B300 SXM</th></tr></thead><tbody><tr class="group-header-row"><td colspan="5"><strong>International Providers</strong></td></tr>
         <tr>
           <td class="provider">
             <a href="https://verda.com/products#H100" target="_blank">Verda</a>
@@ -336,11 +315,11 @@
         </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Average</strong></td>
-      <td><strong>$3.60</strong></td><td><strong>$4.35</strong></td><td><strong>$7.71</strong></td><td><strong>$7.67</strong></td>
+      <td>$3.60</td><td>$4.35</td><td>$7.71</td><td>$7.67</td>
     </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Median</strong></td>
-      <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.92</strong></td><td><strong>$7.50</strong></td>
+      <td>$3.57</td><td>$4.50</td><td>$6.92</td><td>$7.50</td>
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
         <tr>
           <td class="provider">
@@ -356,19 +335,19 @@
         </tr>
     <tr class="summary-row ind-summary-row">
       <td class="provider"><strong>Indian Average</strong></td>
-      <td><strong>$3.64</strong></td><td><strong>$4.11</strong></td><td><strong>$6.50</strong></td><td><strong>—</strong></td>
+      <td>$3.64</td><td>$4.11</td><td>$6.50</td><td>—</td>
     </tr>
     <tr class="summary-row ind-summary-row">
       <td class="provider"><strong>Indian Median</strong></td>
-      <td><strong>$3.64</strong></td><td><strong>$4.11</strong></td><td><strong>$6.50</strong></td><td><strong>—</strong></td>
+      <td>$3.64</td><td>$4.11</td><td>$6.50</td><td>—</td>
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Average (All)</strong></td>
-      <td><strong>$3.61</strong></td><td><strong>$4.27</strong></td><td><strong>$7.51</strong></td><td><strong>$7.67</strong></td>
+      <td>$3.61</td><td>$4.27</td><td>$7.51</td><td>$7.67</td>
     </tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Median (All)</strong></td>
-      <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.69</strong></td><td><strong>$7.50</strong></td>
+      <td>$3.57</td><td>$4.50</td><td>$6.69</td><td>$7.50</td>
     </tr></tbody></table>
   </div>
   <p class="table-note">* Note: Averages (but not medians) exclude pricing anomalies that are more than 50% above or below the overall median. Outliers are highlighted in red.</p>
@@ -402,8 +381,7 @@
         let text = cell.innerText.replace(/⚠️/g, "").trim();
         rowData.push(text);
       }
-      tsv += rowData.join("	") + "
-";
+      tsv += rowData.join("\t") + "\n";
     }
 
     const tableHtml = table.outerHTML;

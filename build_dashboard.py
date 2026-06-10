@@ -58,9 +58,9 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
     int_sites = [site for site in latest if site["site_id"] not in ["neysa", "e2e"]]
     ind_sites = [site for site in latest if site["site_id"] in ["neysa", "e2e"]]
 
-    # Header row
+    # Header row (plain text, no badges)
     header_chips = "".join(
-        f'<th><span class="chip-badge" style="background:{CHIP_STYLES[c]["bg"]}; color:{CHIP_STYLES[c]["text"]}; border: 1px solid {CHIP_STYLES[c]["border"]}">{c} SXM</span></th>'
+        f'<th>{c} SXM</th>'
         for c in CHIPS
     )
     header = f"<tr><th>Provider</th>{header_chips}</tr>"
@@ -84,11 +84,11 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
 
     # 2. International Averages & Medians
     int_avg_cells = "".join(
-        f"<td><strong>${int_averages[c]:.2f}</strong></td>" if int_averages[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${int_averages[c]:.2f}</td>" if int_averages[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     int_med_cells = "".join(
-        f"<td><strong>${int_medians[c]:.2f}</strong></td>" if int_medians[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${int_medians[c]:.2f}</td>" if int_medians[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     rows += f"""
@@ -120,11 +120,11 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
 
     # 4. Indian Averages & Medians (Soft Amber background)
     ind_avg_cells = "".join(
-        f"<td><strong>${ind_averages[c]:.2f}</strong></td>" if ind_averages[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${ind_averages[c]:.2f}</td>" if ind_averages[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     ind_med_cells = "".join(
-        f"<td><strong>${ind_medians[c]:.2f}</strong></td>" if ind_medians[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${ind_medians[c]:.2f}</td>" if ind_medians[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     rows += f"""
@@ -141,11 +141,11 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
     rows += f"""<tr class="table-spacer-row"><td colspan="{len(CHIPS) + 1}"></td></tr>"""
     # 5. Combined Total Averages & Medians (Distinct Blue background)
     all_avg_cells = "".join(
-        f"<td><strong>${all_averages[c]:.2f}</strong></td>" if all_averages[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${all_averages[c]:.2f}</td>" if all_averages[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     all_med_cells = "".join(
-        f"<td><strong>${all_medians[c]:.2f}</strong></td>" if all_medians[c] is not None else "<td><strong>—</strong></td>"
+        f"<td>${all_medians[c]:.2f}</td>" if all_medians[c] is not None else "<td>—</td>"
         for c in CHIPS
     )
     rows += f"""
@@ -326,40 +326,29 @@ def generate_html(latest, history):
       margin: 0 auto;
     }}
     header {{
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+      margin-bottom: 2.5rem;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 2rem;
+      padding-bottom: 1.5rem;
     }}
     h1 {{
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-size: 1.5rem;
+      font-weight: 600;
       color: var(--text);
-      letter-spacing: -0.02em;
-    }}
-    h1 span {{
-      color: var(--accent);
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
     }}
     .subtitle {{
       color: var(--muted);
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
+      font-size: 0.88rem;
       font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }}
-    .last-updated {{
-      text-align: right;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }}
-    .last-updated strong {{
-      color: var(--text);
-      font-size: 0.95rem;
-      display: block;
-      margin-top: 0.25rem;
+    .meta-divider {{
+      color: var(--border);
+      font-weight: 300;
     }}
     .section-title {{
       font-size: 0.85rem;
@@ -396,12 +385,11 @@ def generate_html(latest, history):
       border-bottom: 1px solid var(--border);
     }}
     th {{
-      background: #f8fafc;
-      font-size: 0.8rem;
+      background: #fdfdfc;
+      font-size: 0.92rem;
       font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
     }}
     tr:last-child td {{ border-bottom: none; }}
     tr {{ transition: background-color 0.2s ease; }}
@@ -426,7 +414,8 @@ def generate_html(latest, history):
       border: none;
     }}
     tr.summary-row td {{
-      font-weight: 600;
+      font-weight: 500;
+      font-size: 0.92rem;
       border-top: 1px solid var(--border);
     }}
     tr.int-summary-row td {{
@@ -448,7 +437,7 @@ def generate_html(latest, history):
     tr.all-summary-row td {{
       background-color: #eff6ff;
       color: #1e40af;
-      font-weight: 700;
+      font-weight: 600;
       border-top: 2px solid #bfdbfe;
       border-bottom: 2px solid #bfdbfe;
     }}
@@ -495,20 +484,12 @@ def generate_html(latest, history):
     }}
     .price {{
       font-variant-numeric: tabular-nums;
-      font-weight: 600;
-      font-size: 1.05rem;
+      font-weight: 400;
+      font-size: 0.92rem;
     }}
     .na {{
       color: rgba(71, 85, 105, 0.3);
       font-weight: 400;
-    }}
-    .chip-badge {{
-      display: inline-block;
-      padding: 0.25em 0.75em;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
     }}
     .flag {{
       cursor: help;
@@ -574,13 +555,11 @@ def generate_html(latest, history):
 
 <div class="container">
   <header>
-    <div>
-      <h1>GPU-as-a-Service <span>Pricing Tracker</span></h1>
-      <div class="subtitle">NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</div>
-    </div>
-    <div class="last-updated">
-      Last updated
-      <strong>{last_updated}</strong>
+    <h1>GPU-as-a-Service Pricing Tracker</h1>
+    <div class="subtitle">
+      <span>NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</span>
+      <span class="meta-divider">|</span>
+      <span>Last updated: {last_updated}</span>
     </div>
   </header>
 
@@ -622,7 +601,7 @@ def generate_html(latest, history):
         let text = cell.innerText.replace(/⚠️/g, "").trim();
         rowData.push(text);
       }}
-      tsv += rowData.join("\t") + "\n";
+      tsv += rowData.join("\\t") + "\\n";
     }}
 
     const tableHtml = table.outerHTML;
