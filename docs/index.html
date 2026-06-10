@@ -205,7 +205,7 @@
     </div>
     <div class="last-updated">
       Last updated
-      <strong>June 09, 2026 at 09:36 UTC</strong>
+      <strong>June 10, 2026 at 03:46 UTC</strong>
     </div>
   </header>
 
@@ -222,25 +222,25 @@
           <td class="provider">
             <a href="https://verda.com/products#H100" target="_blank">Verda</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.25</span></td><td><span class="price">$4.00</span></td><td><span class="price">$6.11</span></td><td><span class="price">$7.50</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.runpod.io/pricing" target="_blank">RunPod</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.29</span></td><td><span class="price">$5.58</span></td><td><span class="price">$8.64</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$5.49</span></td><td><span class="price">$6.79</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://nebius.com/prices" target="_blank">Nebius</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.85</span></td><td><span class="price">$4.50</span></td><td><span class="price">$7.15</span></td><td><span class="price">$7.85</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -252,13 +252,13 @@
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/" target="_blank">Spheron</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.e2enetworks.com/pricing" target="_blank">E2E Networks</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$2.60</span></td><td><span class="price">$3.12</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
         </tr></tbody></table>
   </div>
 
@@ -269,7 +269,7 @@
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
-    <p class="all-good">✅ All extracted prices are within expected ranges.</p>
+    <ul class='flagged-list'><li><strong>Verda</strong> — B300 SXM: $7.50/hr (outside expected range — verify manually)</li><li><strong>Nebius</strong> — B300 SXM: $7.85/hr (outside expected range — verify manually)</li><li><strong>Spheron</strong> — B200 SXM: $5.34/hr (outside expected range — verify manually)</li><li><strong>Spheron</strong> — B300 SXM: $3.29/hr (outside expected range — verify manually)</li></ul>
   </div>
 
   <footer>
@@ -286,8 +286,8 @@
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["2026-06-09", "2026-06-09", "2026-06-09", "2026-06-09", "2026-06-09", "2026-06-09", "2026-06-09", "2026-06-09"],
-        datasets: [{"label": "H100 SXM (lowest)", "data": [null, null, null, null, null, null, null, 3.99], "borderColor": "#4f8ef7", "backgroundColor": "#4f8ef733", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [null, null, null, null, null, null, null, 4.73], "borderColor": "#f7a84f", "backgroundColor": "#f7a84f33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [null, null, null, null, null, null, null, 6.69], "borderColor": "#4ff7a0", "backgroundColor": "#4ff7a033", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [null, null, null, null, null, null, null, null], "borderColor": "#f74f6e", "backgroundColor": "#f74f6e33", "tension": 0.3, "spanGaps": true}],
+        labels: ["2026-06-10"],
+        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01], "borderColor": "#4f8ef7", "backgroundColor": "#4f8ef733", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12], "borderColor": "#f7a84f", "backgroundColor": "#f7a84f33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34], "borderColor": "#4ff7a0", "backgroundColor": "#4ff7a033", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [3.29], "borderColor": "#f74f6e", "backgroundColor": "#f74f6e33", "tension": 0.3, "spanGaps": true}],
       },
       options: {
         responsive: true,
