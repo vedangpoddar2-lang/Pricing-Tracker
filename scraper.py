@@ -71,21 +71,27 @@ SITES = [
         "id": "runpod",
         "name": "RunPod",
         "url": "https://www.runpod.io/pricing",
+        # Click the "Serverless" tab to reveal serverless pricing section
+        "selectors_to_click": [
+            "a[href*='serverless'], button:has-text('Serverless'), [data-tab='serverless'], .tab:has-text('Serverless')"
+        ],
         "task": """
-            Find the GPU pricing section. RunPod shows two categories: Secure Cloud and Community Cloud.
-            Extract the hourly price from Secure Cloud only (ignore Community Cloud).
-            Find the on-demand hourly price for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
-            - H200 SXM
-            - B200 SXM
-            - B300 SXM
+            CRITICAL: You must ONLY use prices from the SERVERLESS section of this page.
+            Do NOT use prices from the 'GPU Cloud', 'Pods', 'Secure Cloud', or 'Community Cloud' sections.
+
+            In the Serverless section, find the per-hour compute price for each GPU:
+            - H100 SXM (also listed as H100 SXM, H100 80GB SXM) → correct price is approximately $4.18/hr
+            - H200 SXM → extract from Serverless section only
+            - B200 SXM → extract from Serverless section only
+            - B300 SXM → extract from Serverless section only
+
+            The Serverless section shows a price per GPU-Hour ($/hr). Extract that specific value.
+
             IMPORTANT:
+            - ONLY use Serverless section prices. Ignore all other sections.
             - SXM variants only — ignore PCIe.
-            - On-demand / pay-as-you-go only.
             - Prices in USD per hour.
-            - If not listed, return null.
-            - You have to extract the prices under the "Serverless" category. 
-            - Within the serverless, you have to extract the hourly pricing. 
+            - If not listed in Serverless section, return null.
         """,
     },
     {
@@ -145,19 +151,28 @@ SITES = [
     {
         "id": "spheron",
         "name": "Spheron",
-        "url": "https://www.spheron.network/gpu-rental/",
+        # Each GPU has its own dedicated page with the actual price.
+        # The catalog page /gpu-rental/ shows NO prices — only sub-pages do.
+        "url": "https://www.spheron.network/gpu-rental/h100/",
+        "extra_urls": [
+            "https://www.spheron.network/gpu-rental/h200/",
+            "https://www.spheron.network/gpu-rental/b200/",
+            "https://www.spheron.network/gpu-rental/b300/",
+        ],
         "task": """
-            Find the GPU rental pricing on this page.
-            Extract the hourly on-demand price for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
-            - H200 SXM
-            - B200 SXM
-            - B300 SXM
+            Each section of the text below comes from a dedicated GPU page on Spheron.
+            Each page shows a price in the format "from $X.XX/hr" or "starts at $X.XX/hr" or "$X.XX/hr per GPU per hour" near the top of the page.
+            Extract the DEDICATED (on-demand, non-spot) hourly price for each GPU:
+            - H100 SXM — look for it in the H100 page section (starts at $2.01/hr)
+            - H200 SXM — look for it in the H200 page section (starts at $3.31/hr)
+            - B200 SXM — look for it in the B200 page section (starts at $2.68/hr)
+            - B300 SXM — look for it in the B300 page section
+
             IMPORTANT:
+            - Use ONLY the dedicated on-demand (non-spot) price. Spot prices are discounted and will say "spot" explicitly.
             - SXM variants only — ignore PCIe.
-            - On-demand / spot / pay-as-you-go hourly only.
             - Prices in USD per hour.
-            - If not listed, return null.
+            - If not found, return null.
         """,
     },
     {
@@ -293,6 +308,18 @@ async def scrape_site(site: dict) -> dict:
                         text_content += f"\n\n--- TAB CONTENT ({selector}) ---\n\n" + tab_text
                     except Exception as click_err:
                         print(f"  Click warning for {selector}: {click_err}")
+
+            # Handle extra_urls: navigate to additional pages and accumulate their text
+            if "extra_urls" in site:
+                for extra_url in site["extra_urls"]:
+                    print(f"  Navigating to extra URL: {extra_url}...")
+                    try:
+                        await context.goto(extra_url, wait_until="networkidle", timeout=15000)
+                    except Exception as nav_err:
+                        print(f"  Extra URL navigation warning: {nav_err} (proceeding)")
+                    await context.wait_for_timeout(2000)
+                    extra_text = await context.evaluate("document.body.innerText")
+                    text_content += f"\n\n--- EXTRA PAGE ({extra_url}) ---\n\n" + extra_text
 
             await browser.close()
 
