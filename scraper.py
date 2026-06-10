@@ -466,8 +466,7 @@ async def main():
         row = f"{r['site_name']:<16}"
         for chip in TARGET_CHIPS:
             val = r["chips"][chip]["price_usd_per_hour"]
-            flag = " !" if r["chips"][chip]["status"] == "flagged" else ""
-            cell = f"${val:.2f}{flag}" if val else "   N/A"
+            cell = f"${val:.2f}" if val else "   N/A"
             row += f" {cell:>8}"
         print(row)
 
