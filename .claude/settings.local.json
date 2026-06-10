@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:browser-use.com)",
+      "Bash(py --version)",
+      "Bash(py -m pip install -r requirements.txt)",
+      "Bash(py -m playwright install chromium)",
+      "Bash(py -m pip install playwright)",
+      "Bash(py -m pip install python-dotenv langchain-groq browser-use)",
+      "Bash(py -m pip install langchain-openai)",
+      "Bash(py -m pip show langchain-openai)",
+      "Bash(py -m pip show browser-use)",
+      "Bash(py -c \"from browser_use.llm import get_llm_model; help\\(get_llm_model\\)\")",
+      "Bash(py -c \"from browser_use.llm.base import BaseChatModel; import inspect; print\\(inspect.getsource\\(BaseChatModel\\)\\)\")",
+      "Bash(py -c ' *)"
+    ]
+  }
+}

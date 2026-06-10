@@ -1,0 +1,46 @@
+name: GPU Price Tracker
+
+on:
+  schedule:
+    # Runs every 7 days at 00:00 UTC on Monday
+    - cron: "0 0 * * 1"
+  workflow_dispatch:  # Also allows manual trigger from GitHub UI
+
+permissions:
+  contents: write  # Needed to commit updated data/ and docs/ files back to repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run scraper
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py
+
+      - name: Regenerate dashboard
+        run: python build_dashboard.py
+
+      - name: Commit and push updated data + dashboard
+        run: |
+          git config user.name  "gpu-tracker-bot"
+          git config user.email "bot@gpu-tracker"
+          git add data/ docs/
+          git diff --cached --quiet || git commit -m "chore: price update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
