@@ -7,6 +7,7 @@ Generates docs/index.html — served by GitHub Pages
 import json
 from pathlib import Path
 from datetime import datetime
+import statistics
 
 CHIPS = ["H100", "H200", "B200", "B300"]
 CHIP_COLORS = {
@@ -32,14 +33,23 @@ def load_data():
     return latest, history
 
 
-def format_price(val, status):
+def format_price(val, chip, medians):
     if val is None:
         return '<span class="na">—</span>'
-    flag = ' <span class="flag" title="Price outside expected range — verify manually">⚠️</span>' if status == "flagged" else ""
+    
+    # Flag dynamically if price is >50% away from the median
+    median_val = medians.get(chip)
+    is_anomaly = False
+    if median_val is not None and median_val > 0:
+        ratio = val / median_val
+        if ratio < 0.5 or ratio > 1.5:
+            is_anomaly = True
+
+    flag = ' <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span>' if is_anomaly else ""
     return f'<span class="price">${val:.2f}</span>{flag}'
 
 
-def build_price_table(latest):
+def build_price_table(latest, medians, averages):
     if not latest:
         return "<p>No data yet. Run the scraper first.</p>"
 
@@ -54,10 +64,8 @@ def build_price_table(latest):
     for site in latest:
         cells = ""
         for chip in CHIPS:
-            chip_data = site["chips"].get(chip, {})
-            price = chip_data.get("price_usd_per_hour")
-            status = chip_data.get("status", "null")
-            cells += f"<td>{format_price(price, status)}</td>"
+            price = site["chips"].get(chip, {}).get("price_usd_per_hour")
+            cells += f"<td>{format_price(price, chip, medians)}</td>"
         rows += f"""
         <tr>
           <td class="provider">
@@ -65,6 +73,28 @@ def build_price_table(latest):
           </td>
           {cells}
         </tr>"""
+
+    # Add Average Row
+    avg_cells = "".join(
+        f"<td><strong>${averages[c]:.2f}</strong></td>" if averages[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    rows += f"""
+    <tr class="summary-row">
+      <td class="provider"><strong>Average</strong></td>
+      {avg_cells}
+    </tr>"""
+
+    # Add Median Row
+    med_cells = "".join(
+        f"<td><strong>${medians[c]:.2f}</strong></td>" if medians[c] is not None else "<td><strong>—</strong></td>"
+        for c in CHIPS
+    )
+    rows += f"""
+    <tr class="summary-row">
+      <td class="provider"><strong>Median</strong></td>
+      {med_cells}
+    </tr>"""
 
     return f"<table><thead>{header}</thead><tbody>{rows}</tbody></table>"
 
@@ -108,27 +138,49 @@ def get_last_updated(latest):
     return "Unknown"
 
 
-def build_flagged_section(latest):
+def build_flagged_section(latest, medians):
     flagged = []
     for site in latest:
         for chip in CHIPS:
-            chip_data = site["chips"].get(chip, {})
-            if chip_data.get("status") == "flagged":
-                price = chip_data.get("price_usd_per_hour")
-                flagged.append(
-                    f"<li><strong>{site['site_name']}</strong> — {chip} SXM: "
-                    f"${price:.2f}/hr (outside expected range — verify manually)</li>"
-                )
+            price = site["chips"].get(chip, {}).get("price_usd_per_hour")
+            if price is not None:
+                median_val = medians.get(chip)
+                if median_val is not None and median_val > 0:
+                    ratio = price / median_val
+                    if ratio < 0.5 or ratio > 1.5:
+                        flagged.append(
+                            f"<li><strong>{site['site_name']}</strong> — {chip} SXM: "
+                            f"${price:.2f}/hr (unusual rate: {ratio*100:.1f}% of median ${median_val:.2f}/hr)</li>"
+                        )
     if not flagged:
         return '<p class="all-good">✅ All extracted prices are within expected ranges.</p>'
     return "<ul class='flagged-list'>" + "".join(flagged) + "</ul>"
 
 
 def generate_html(latest, history):
-    table_html = build_price_table(latest)
+    # Calculate medians and averages for each chip
+    chip_prices = {c: [] for c in CHIPS}
+    for site in latest:
+        for c in CHIPS:
+            val = site["chips"].get(c, {}).get("price_usd_per_hour")
+            if val is not None:
+                chip_prices[c].append(val)
+
+    medians = {}
+    averages = {}
+    for c in CHIPS:
+        prices = chip_prices[c]
+        if prices:
+            medians[c] = statistics.median(prices)
+            averages[c] = statistics.mean(prices)
+        else:
+            medians[c] = None
+            averages[c] = None
+
+    table_html = build_price_table(latest, medians, averages)
     labels_js, datasets_js = build_history_chart_data(history)
     last_updated = get_last_updated(latest)
-    flagged_html = build_flagged_section(latest)
+    flagged_html = build_flagged_section(latest, medians)
 
     show_chart = "true" if history else "false"
 
@@ -248,6 +300,13 @@ def generate_html(latest, history):
     tr {{ transition: background-color 0.2s ease; }}
     tr:hover td {{
       background-color: var(--surface-hover);
+    }}
+    tr.summary-row td {{
+      background-color: #f8fafc;
+      border-top: 2px solid var(--border);
+    }}
+    tr.summary-row:hover td {{
+      background-color: #f1f5f9;
     }}
     .provider a {{
       color: var(--text);

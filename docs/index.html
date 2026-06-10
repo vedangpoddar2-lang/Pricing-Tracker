@@ -115,6 +115,13 @@
     tr:hover td {
       background-color: var(--surface-hover);
     }
+    tr.summary-row td {
+      background-color: #f8fafc;
+      border-top: 2px solid var(--border);
+    }
+    tr.summary-row:hover td {
+      background-color: #f1f5f9;
+    }
     .provider a {
       color: var(--text);
       text-decoration: none;
@@ -216,7 +223,7 @@
           <td class="provider">
             <a href="https://verda.com/products#H100" target="_blank">Verda</a>
           </td>
-          <td><span class="price">$3.25</span></td><td><span class="price">$4.00</span></td><td><span class="price">$6.11</span></td><td><span class="price">$7.50</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
+          <td><span class="price">$3.25</span></td><td><span class="price">$4.00</span></td><td><span class="price">$6.11</span></td><td><span class="price">$7.50</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -228,13 +235,13 @@
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="price">$5.49</span></td><td><span class="price">$6.79</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$5.49</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td><td><span class="price">$6.79</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://nebius.com/prices" target="_blank">Nebius</a>
           </td>
-          <td><span class="price">$3.85</span></td><td><span class="price">$4.50</span></td><td><span class="price">$7.15</span></td><td><span class="price">$7.85</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
+          <td><span class="price">$3.85</span></td><td><span class="price">$4.50</span></td><td><span class="price">$7.15</span></td><td><span class="price">$7.85</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -246,14 +253,22 @@
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/" target="_blank">Spheron</a>
           </td>
-          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price outside expected range — verify manually">⚠️</span></td>
+          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span></td><td><span class="price">$3.29</span> <span class="flag" title="Price is >50% away from the median — verify manually">⚠️</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.e2enetworks.com/pricing" target="_blank">E2E Networks</a>
           </td>
           <td><span class="price">$2.60</span></td><td><span class="price">$3.13</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
-        </tr></tbody></table>
+        </tr>
+    <tr class="summary-row">
+      <td class="provider"><strong>Average</strong></td>
+      <td><strong>$3.61</strong></td><td><strong>$4.58</strong></td><td><strong>$7.20</strong></td><td><strong>$6.21</strong></td>
+    </tr>
+    <tr class="summary-row">
+      <td class="provider"><strong>Median</strong></td>
+      <td><strong>$3.57</strong></td><td><strong>$4.50</strong></td><td><strong>$6.69</strong></td><td><strong>$7.50</strong></td>
+    </tr></tbody></table>
   </div>
 
   <p class="section-title">Price Trends — Lowest Available per Chip</p>
@@ -263,7 +278,7 @@
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
-    <ul class='flagged-list'><li><strong>Verda</strong> — B300 SXM: $7.50/hr (outside expected range — verify manually)</li><li><strong>Nebius</strong> — B300 SXM: $7.85/hr (outside expected range — verify manually)</li><li><strong>Spheron</strong> — B200 SXM: $5.34/hr (outside expected range — verify manually)</li><li><strong>Spheron</strong> — B300 SXM: $3.29/hr (outside expected range — verify manually)</li></ul>
+    <ul class='flagged-list'><li><strong>Together AI</strong> — H100 SXM: $5.49/hr (unusual rate: 153.8% of median $3.57/hr)</li><li><strong>Together AI</strong> — H200 SXM: $6.79/hr (unusual rate: 150.9% of median $4.50/hr)</li><li><strong>Spheron</strong> — B300 SXM: $3.29/hr (unusual rate: 43.9% of median $7.50/hr)</li></ul>
   </div>
 
   <footer>
