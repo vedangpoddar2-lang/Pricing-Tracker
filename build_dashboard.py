@@ -166,7 +166,7 @@ def build_history_chart_data(history):
     # Collect all run timestamps
     labels = [h["run_at"][:10] for h in history]  # YYYY-MM-DD
 
-    # For each chip, collect lowest price seen across all providers per run
+    # For each chip, collect lowest clean price seen across all providers per run
     datasets = []
     for chip in CHIPS:
         prices = []
@@ -176,7 +176,20 @@ def build_history_chart_data(history):
                 val = site["chips"].get(chip, {}).get("price_usd_per_hour")
                 if val is not None:
                     run_prices.append(val)
-            prices.append(min(run_prices) if run_prices else None)
+            
+            if run_prices:
+                run_median = statistics.median(run_prices)
+                if run_median > 0:
+                    clean_prices = [
+                        p for p in run_prices 
+                        if 0.5 * run_median <= p <= 1.5 * run_median
+                    ]
+                else:
+                    clean_prices = run_prices
+                
+                prices.append(min(clean_prices) if clean_prices else None)
+            else:
+                prices.append(None)
 
         datasets.append({
             "label": f"{chip} SXM (lowest)",
@@ -205,7 +218,7 @@ def get_last_updated(latest):
 
 
 def build_flagged_section(latest, medians):
-    flagged = []
+    flagged_rows = ""
     for site in latest:
         for chip in CHIPS:
             price = site["chips"].get(chip, {}).get("price_usd_per_hour")
@@ -214,13 +227,33 @@ def build_flagged_section(latest, medians):
                 if median_val is not None and median_val > 0:
                     ratio = price / median_val
                     if ratio < 0.5 or ratio > 1.5:
-                        flagged.append(
-                            f"<li><strong>{site['site_name']}</strong> — {chip} SXM: "
-                            f"${price:.2f}/hr (unusual rate: {ratio*100:.1f}% of median ${median_val:.2f}/hr)</li>"
-                        )
-    if not flagged:
-        return '<p class="all-good">✅ All extracted prices are within expected ranges.</p>'
-    return "<ul class='flagged-list'>" + "".join(flagged) + "</ul>"
+                        diff_pct = (ratio - 1) * 100
+                        diff_str = f"+{diff_pct:.1f}%" if diff_pct > 0 else f"{diff_pct:.1f}%"
+                        flagged_rows += f"""
+                        <tr>
+                          <td>{site['site_name']}</td>
+                          <td>{chip} SXM</td>
+                          <td class="flagged-price">${price:.2f}</td>
+                          <td>${median_val:.2f}</td>
+                          <td class="flagged-deviation">{diff_str}</td>
+                        </tr>"""
+    if not flagged_rows:
+        return '<p class="all-good">✓ All extracted prices are within normal expected ranges.</p>'
+    return f"""
+    <table class="flagged-table">
+      <thead>
+        <tr>
+          <th>Provider</th>
+          <th>GPU Chip</th>
+          <th>Scraped Price</th>
+          <th>All-Player Median</th>
+          <th>Deviation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {flagged_rows}
+      </tbody>
+    </table>"""
 
 
 def generate_html(latest, history):
@@ -325,30 +358,98 @@ def generate_html(latest, history):
       max-width: 1200px;
       margin: 0 auto;
     }}
-    header {{
+    .site-header {{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
       margin-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }}
-    h1 {{
-      font-size: 1.5rem;
+    .header-main {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }}
+    .brand-zone {{
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }}
+    .brand-logo {{
+      background: #1a1a1a;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }}
+    .brand-details h1 {{
+      font-size: 1.35rem;
       font-weight: 600;
       color: var(--text);
       letter-spacing: -0.015em;
-      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      margin: 0;
     }}
-    .subtitle {{
+    .subtitle-text {{
       color: var(--muted);
-      font-size: 0.88rem;
-      font-weight: 400;
+      font-size: 0.82rem;
+      margin-top: 0.15rem;
+    }}
+    .header-meta {{
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }}
-    .meta-divider {{
-      color: var(--border);
-      font-weight: 300;
+    .status-badge {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #166534;
+    }}
+    .status-dot {{
+      width: 6px;
+      height: 6px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 2s infinite;
+    }}
+    @keyframes pulse-dot {{
+      0% {{ transform: scale(0.95); opacity: 0.8; }}
+      50% {{ transform: scale(1.15); opacity: 1; }}
+      100% {{ transform: scale(0.95); opacity: 0.8; }}
+    }}
+    .update-badge {{
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+    }}
+    .header-sub {{
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }}
     .section-title {{
       font-size: 0.85rem;
@@ -504,7 +605,7 @@ def generate_html(latest, history):
     }}
     /* Sanity section */
     .sanity-wrap {{
-      padding: 1.5rem 2rem;
+      padding: 0; /* Let the table fill the card boundaries */
     }}
     .all-good {{
       color: #059669;
@@ -512,17 +613,40 @@ def generate_html(latest, history):
       align-items: center;
       gap: 0.5rem;
       font-weight: 500;
+      padding: 1.5rem 2rem;
     }}
-    .flagged-list {{
-      padding-left: 1.2rem;
+    .flagged-table {{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
     }}
-    .flagged-list li {{
-      margin-bottom: 0.5rem;
+    .flagged-table th, .flagged-table td {{
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }}
+    .flagged-table th {{
+      background: #fdfdfc;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--border);
+    }}
+    .flagged-table tr:last-child td {{
+      border-bottom: none;
+    }}
+    .flagged-table tr:hover td {{
+      background-color: var(--surface-hover);
+    }}
+    .flagged-price, .flagged-deviation {{
       color: #dc2626;
+      font-weight: 500; /* normal, not bold */
     }}
     .price.outlier {{
       color: #dc2626;
-      font-weight: 700;
+      font-weight: 500; /* normal, not bold */
     }}
     .table-note {{
       font-size: 0.82rem;
@@ -554,12 +678,27 @@ def generate_html(latest, history):
 <body>
 
 <div class="container">
-  <header>
-    <h1>GPU-as-a-Service Pricing Tracker</h1>
-    <div class="subtitle">
-      <span>NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</span>
-      <span class="meta-divider">|</span>
-      <span>Last updated: {last_updated}</span>
+  <header class="site-header">
+    <div class="header-main">
+      <div class="brand-zone">
+        <div class="brand-logo">GPU</div>
+        <div class="brand-details">
+          <h1>Pricing Tracker</h1>
+          <p class="subtitle-text">NVIDIA SXM On-Demand GPU Instances</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">Active Monitoring</span>
+        </div>
+        <div class="update-badge">
+          Last Updated: {last_updated}
+        </div>
+      </div>
+    </div>
+    <div class="header-sub">
+      NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr
     </div>
   </header>
 

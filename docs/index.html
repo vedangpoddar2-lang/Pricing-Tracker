@@ -33,30 +33,98 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    header {
+    .site-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
       margin-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
-    h1 {
-      font-size: 1.5rem;
+    .header-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .brand-zone {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .brand-logo {
+      background: #1a1a1a;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand-details h1 {
+      font-size: 1.35rem;
       font-weight: 600;
       color: var(--text);
       letter-spacing: -0.015em;
-      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      margin: 0;
     }
-    .subtitle {
+    .subtitle-text {
       color: var(--muted);
-      font-size: 0.88rem;
-      font-weight: 400;
+      font-size: 0.82rem;
+      margin-top: 0.15rem;
+    }
+    .header-meta {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }
-    .meta-divider {
-      color: var(--border);
-      font-weight: 300;
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #166534;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .update-badge {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .header-sub {
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
     .section-title {
       font-size: 0.85rem;
@@ -212,7 +280,7 @@
     }
     /* Sanity section */
     .sanity-wrap {
-      padding: 1.5rem 2rem;
+      padding: 0; /* Let the table fill the card boundaries */
     }
     .all-good {
       color: #059669;
@@ -220,17 +288,40 @@
       align-items: center;
       gap: 0.5rem;
       font-weight: 500;
+      padding: 1.5rem 2rem;
     }
-    .flagged-list {
-      padding-left: 1.2rem;
+    .flagged-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
     }
-    .flagged-list li {
-      margin-bottom: 0.5rem;
+    .flagged-table th, .flagged-table td {
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .flagged-table th {
+      background: #fdfdfc;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--border);
+    }
+    .flagged-table tr:last-child td {
+      border-bottom: none;
+    }
+    .flagged-table tr:hover td {
+      background-color: var(--surface-hover);
+    }
+    .flagged-price, .flagged-deviation {
       color: #dc2626;
+      font-weight: 500; /* normal, not bold */
     }
     .price.outlier {
       color: #dc2626;
-      font-weight: 700;
+      font-weight: 500; /* normal, not bold */
     }
     .table-note {
       font-size: 0.82rem;
@@ -262,12 +353,27 @@
 <body>
 
 <div class="container">
-  <header>
-    <h1>GPU-as-a-Service Pricing Tracker</h1>
-    <div class="subtitle">
-      <span>NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr</span>
-      <span class="meta-divider">|</span>
-      <span>Last updated: June 10, 2026 at 10:22 AM IST</span>
+  <header class="site-header">
+    <div class="header-main">
+      <div class="brand-zone">
+        <div class="brand-logo">GPU</div>
+        <div class="brand-details">
+          <h1>Pricing Tracker</h1>
+          <p class="subtitle-text">NVIDIA SXM On-Demand GPU Instances</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">Active Monitoring</span>
+        </div>
+        <div class="update-badge">
+          Last Updated: June 10, 2026 at 10:22 AM IST
+        </div>
+      </div>
+    </div>
+    <div class="header-sub">
+      NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr
     </div>
   </header>
 
@@ -354,7 +460,56 @@
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
-    <ul class='flagged-list'><li><strong>Together AI</strong> — H100 SXM: $5.49/hr (unusual rate: 153.8% of median $3.57/hr)</li><li><strong>Together AI</strong> — H200 SXM: $6.79/hr (unusual rate: 150.9% of median $4.50/hr)</li><li><strong>Spheron</strong> — H100 SXM: $1.43/hr (unusual rate: 40.1% of median $3.57/hr)</li><li><strong>Spheron</strong> — B200 SXM: $2.74/hr (unusual rate: 41.0% of median $6.69/hr)</li><li><strong>Spheron</strong> — B300 SXM: $3.29/hr (unusual rate: 43.9% of median $7.50/hr)</li></ul>
+    
+    <table class="flagged-table">
+      <thead>
+        <tr>
+          <th>Provider</th>
+          <th>GPU Chip</th>
+          <th>Scraped Price</th>
+          <th>All-Player Median</th>
+          <th>Deviation</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+                        <tr>
+                          <td>Together AI</td>
+                          <td>H100 SXM</td>
+                          <td class="flagged-price">$5.49</td>
+                          <td>$3.57</td>
+                          <td class="flagged-deviation">+53.8%</td>
+                        </tr>
+                        <tr>
+                          <td>Together AI</td>
+                          <td>H200 SXM</td>
+                          <td class="flagged-price">$6.79</td>
+                          <td>$4.50</td>
+                          <td class="flagged-deviation">+50.9%</td>
+                        </tr>
+                        <tr>
+                          <td>Spheron</td>
+                          <td>H100 SXM</td>
+                          <td class="flagged-price">$1.43</td>
+                          <td>$3.57</td>
+                          <td class="flagged-deviation">-59.9%</td>
+                        </tr>
+                        <tr>
+                          <td>Spheron</td>
+                          <td>B200 SXM</td>
+                          <td class="flagged-price">$2.74</td>
+                          <td>$6.69</td>
+                          <td class="flagged-deviation">-59.0%</td>
+                        </tr>
+                        <tr>
+                          <td>Spheron</td>
+                          <td>B300 SXM</td>
+                          <td class="flagged-price">$3.29</td>
+                          <td>$7.50</td>
+                          <td class="flagged-deviation">-56.1%</td>
+                        </tr>
+      </tbody>
+    </table>
   </div>
 
   <p class="section-title">Price Trends — Lowest Available per Chip</p>
@@ -419,7 +574,7 @@
       type: "line",
       data: {
         labels: ["2026-06-10", "2026-06-10", "2026-06-10"],
-        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 1.43], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 2.74], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [3.29, 3.29, 3.29], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
+        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 2.9], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 6.11], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [7.5, 7.5, 7.5], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
       },
       options: {
         responsive: true,
