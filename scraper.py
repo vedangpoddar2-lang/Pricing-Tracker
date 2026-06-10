@@ -30,14 +30,6 @@ CHIP_ALIASES = {
     "B300": ["B300 SXM", "B300"],
 }
 
-# Pricing sanity ranges in USD/hr — flags anything outside for review
-SANITY_RANGES = {
-    "H100": (1.50, 6.00),
-    "H200": (3.00, 9.00),
-    "B200": (6.00, 20.00),
-    "B300": (8.00, 25.00),
-}
-
 # ── Site task definitions ─────────────────────────────────────────────────────
 SITES = [
     {
@@ -88,11 +80,12 @@ SITES = [
             - B200 SXM
             - B300 SXM
             IMPORTANT:
-            - Secure Cloud pricing only.
             - SXM variants only — ignore PCIe.
             - On-demand / pay-as-you-go only.
             - Prices in USD per hour.
             - If not listed, return null.
+            - You have to extract the prices under the "Serverless" category. 
+            - Within the serverless, you have to extract the hourly pricing. 
         """,
     },
     {
