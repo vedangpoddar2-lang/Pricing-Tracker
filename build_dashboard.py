@@ -705,7 +705,7 @@ def generate_html(latest, history):
   <div class="table-header-actions">
     <p class="section-title">Current Prices (USD / hr)</p>
     <div class="header-buttons">
-      <button id="triggerScrapeBtn" onclick="window.open('https://github.com/vedangpoddar2-lang/Pricing-Tracker/actions/workflows/scrape.yml', '_blank')" class="btn-copy btn-action">Trigger Scrape</button>
+      <button id="triggerScrapeBtn" onclick="triggerWorkflow()" class="btn-copy btn-action">Trigger Scrape</button>
       <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
     </div>
   </div>
@@ -819,6 +819,40 @@ def generate_html(latest, history):
   }} else {{
     document.getElementById("trendChart").parentElement.innerHTML =
       "<p style='color:#64748b;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
+  }}
+
+  function triggerWorkflow() {{
+    const btn = document.getElementById("triggerScrapeBtn");
+    const originalText = btn.innerText;
+    btn.innerText = "Triggering...";
+    btn.disabled = true;
+
+    fetch("/api/trigger", {{
+      method: "POST"
+    }})
+    .then(response => {{
+      if (response.ok) {{
+        btn.innerText = "✓ Triggered!";
+        btn.classList.add("btn-success");
+        setTimeout(() => {{
+          btn.innerText = originalText;
+          btn.classList.remove("btn-success");
+          btn.disabled = false;
+        }}, 3000);
+      }} else {{
+        return response.json().then(data => {{
+          throw new Error(data.error || "HTTP " + response.status);
+        }}).catch(() => {{
+          throw new Error("HTTP " + response.status);
+        }});
+      }}
+    }})
+    .catch(err => {{
+      console.error(err);
+      alert("Failed to trigger scrape: " + err.message + "\\n\\nMake sure GITHUB_PAT is set in Vercel's Environment Variables.");
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }});
   }}
 </script>
 
