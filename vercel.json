@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/trigger.py": {
+      "runtime": "@vercel/python"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
