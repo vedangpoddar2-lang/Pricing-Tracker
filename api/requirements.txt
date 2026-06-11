@@ -1,0 +1,1 @@
+# No serverless function dependencies required (uses standard library only)

@@ -827,7 +827,7 @@ def generate_html(latest, history):
     btn.innerText = "Triggering...";
     btn.disabled = true;
 
-    fetch("/api/trigger", {{
+    fetch("/api/index", {{
       method: "POST"
     }})
     .then(response => {{
