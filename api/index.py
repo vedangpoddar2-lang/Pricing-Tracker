@@ -46,5 +46,11 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             
     def do_GET(self):
-        # Redirect GET requests to POST logic to allow easy browser testing
-        self.do_POST()
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps({
+            "status": "online",
+            "message": "GPU Price Tracker API is running. To trigger a scrape, make a POST request to this endpoint."
+        }).encode('utf-8'))
+
