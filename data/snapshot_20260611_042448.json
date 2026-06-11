@@ -17,7 +17,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:12:18.800599+00:00"
+    "scraped_at": "2026-06-11T04:22:19.517107+00:00"
   },
   {
     "site_id": "verda",
@@ -37,7 +37,7 @@
         "price_usd_per_hour": 7.5
       }
     },
-    "scraped_at": "2026-06-11T05:12:40.076933+00:00"
+    "scraped_at": "2026-06-11T04:22:41.516643+00:00"
   },
   {
     "site_id": "runpod",
@@ -57,7 +57,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:12:50.735830+00:00"
+    "scraped_at": "2026-06-11T04:22:57.082451+00:00"
   },
   {
     "site_id": "together",
@@ -77,7 +77,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:13:08.982905+00:00"
+    "scraped_at": "2026-06-11T04:23:11.944208+00:00"
   },
   {
     "site_id": "nebius",
@@ -97,7 +97,7 @@
         "price_usd_per_hour": 7.85
       }
     },
-    "scraped_at": "2026-06-11T05:13:20.738260+00:00"
+    "scraped_at": "2026-06-11T04:23:34.353797+00:00"
   },
   {
     "site_id": "lambda",
@@ -117,7 +117,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:13:37.124183+00:00"
+    "scraped_at": "2026-06-11T04:23:50.842424+00:00"
   },
   {
     "site_id": "spheron",
@@ -125,19 +125,19 @@
     "url": "https://www.spheron.network/gpu-rental/h100/",
     "chips": {
       "H100": {
-        "price_usd_per_hour": 2.01
+        "price_usd_per_hour": null
       },
       "H200": {
-        "price_usd_per_hour": 3.31
+        "price_usd_per_hour": null
       },
       "B200": {
-        "price_usd_per_hour": 2.71
+        "price_usd_per_hour": null
       },
       "B300": {
-        "price_usd_per_hour": 3.29
+        "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:14:09.068185+00:00"
+    "scraped_at": "2026-06-11T04:24:30.334637+00:00"
   },
   {
     "site_id": "e2e",
@@ -148,15 +148,15 @@
         "price_usd_per_hour": 2.6
       },
       "H200": {
-        "price_usd_per_hour": 3.13
+        "price_usd_per_hour": 3.12
       },
       "B200": {
-        "price_usd_per_hour": 6.5
+        "price_usd_per_hour": 4.58
       },
       "B300": {
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-06-11T05:14:26.997353+00:00"
+    "scraped_at": "2026-06-11T04:24:45.637190+00:00"
   }
 ]

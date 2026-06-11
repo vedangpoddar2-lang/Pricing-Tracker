@@ -71,10 +71,6 @@ SITES = [
         "id": "runpod",
         "name": "RunPod",
         "url": "https://www.runpod.io/pricing",
-        # Click the "Serverless" tab to reveal serverless pricing section
-        "selectors_to_click": [
-            "a[href*='serverless'], button:has-text('Serverless'), [data-tab='serverless'], .tab:has-text('Serverless')"
-        ],
         "task": """
             CRITICAL: You must ONLY use prices from the SERVERLESS section of this page.
             Do NOT use prices from the 'GPU Cloud', 'Pods', 'Secure Cloud', or 'Community Cloud' sections.
@@ -268,19 +264,20 @@ async def scrape_site(site: dict) -> dict:
 
     try:
         async with async_playwright() as p:
-            # Force Browserbase usage (no local Chromium fallback)
             browserbase_key = os.environ.get("BROWSERBASE_API_KEY")
-            if not browserbase_key:
-                raise ValueError("Error: BROWSERBASE_API_KEY environment variable is missing. You must configure this key to run the scraper.")
-            
-            print("Connecting to Browserbase cloud browser...")
-            from browserbase import Browserbase
-            bb = Browserbase(api_key=browserbase_key)
-            session = await asyncio.to_thread(bb.sessions.create)
-            print(f"Browserbase Session Created: {session.id}")
-            browser = await p.chromium.connect_over_cdp(session.connect_url)
-            # Browserbase remote sessions have a context and page pre-opened
-            context = browser.contexts[0].pages[0]
+            if browserbase_key:
+                print("Connecting to Browserbase cloud browser...")
+                from browserbase import Browserbase
+                bb = Browserbase(api_key=browserbase_key)
+                session = await asyncio.to_thread(bb.sessions.create)
+                print(f"Browserbase Session Created: {session.id}")
+                browser = await p.chromium.connect_over_cdp(session.connect_url)
+                # Browserbase remote sessions have a context and page pre-opened
+                context = browser.contexts[0].pages[0]
+            else:
+                print("BROWSERBASE_API_KEY missing, launching local Chromium...")
+                browser = await p.chromium.launch(headless=True)
+                context = await browser.new_page()
 
             # Navigate to the page
             print(f"Navigating to {site['url']}...")
@@ -293,8 +290,22 @@ async def scrape_site(site: dict) -> dict:
             # Wait a short moment for dynamic components to finish loading
             await context.wait_for_timeout(3000)
 
+            # Remove cookie consent banners that might block clicking/viewing, making sure not to remove root elements
+            try:
+                await context.evaluate("""
+                    document.querySelectorAll('[id*="cookie"], [class*="cookie"], [id*="consent"], [class*="consent"]').forEach(el => {
+                        if (el.tagName !== 'BODY' && el.tagName !== 'HTML') {
+                            el.remove();
+                        }
+                    });
+                """)
+            except Exception as eval_err:
+                print(f"  Cookie removal warning: {eval_err}")
+
             # Extract page text
             text_content = await context.evaluate("document.body.innerText")
+            if "extra_urls" in site:
+                text_content = text_content[:4000]
 
             # Handle dynamic tab clicking if selectors are defined
             if "selectors_to_click" in site:
@@ -319,12 +330,22 @@ async def scrape_site(site: dict) -> dict:
                         print(f"  Extra URL navigation warning: {nav_err} (proceeding)")
                     await context.wait_for_timeout(2000)
                     extra_text = await context.evaluate("document.body.innerText")
-                    text_content += f"\n\n--- EXTRA PAGE ({extra_url}) ---\n\n" + extra_text
+                    text_content += f"\n\n--- EXTRA PAGE ({extra_url}) ---\n\n" + extra_text[:4000]
 
             await browser.close()
 
             # Clean text to save tokens
             cleaned_text = clean_extracted_text(text_content)
+            
+            # For RunPod, isolate the serverless section specifically to prevent model confusion
+            if site["id"] == "runpod":
+                match_start = re.search(r"Serverless\n(?:\[\.\.\.\]\n)?Cost effective", cleaned_text, re.IGNORECASE)
+                if match_start:
+                    start_idx = match_start.start()
+                    end_idx = cleaned_text.find("Clusters", start_idx)
+                    if end_idx != -1:
+                        cleaned_text = cleaned_text[start_idx:end_idx]
+
             print(f"Extracted {len(text_content)} chars. Cleaned to {len(cleaned_text)} chars. Parsing with Groq...")
 
             # Call Groq Async client

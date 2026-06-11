@@ -589,5 +589,665 @@
         "scraped_at": "2026-06-10T04:54:00.641504+00:00"
       }
     ]
+  },
+  {
+    "run_at": "2026-06-11T04:24:48.657180+00:00",
+    "results": [
+      {
+        "site_id": "neysa",
+        "site_name": "Neysa",
+        "url": "https://neysa.ai/pricing/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.39
+          },
+          "H200": {
+            "price_usd_per_hour": 4.73
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:22:19.517107+00:00"
+      },
+      {
+        "site_id": "verda",
+        "site_name": "Verda",
+        "url": "https://verda.com/products#H100",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.25
+          },
+          "H200": {
+            "price_usd_per_hour": 4.0
+          },
+          "B200": {
+            "price_usd_per_hour": 6.11
+          },
+          "B300": {
+            "price_usd_per_hour": 7.5
+          }
+        },
+        "scraped_at": "2026-06-11T04:22:41.516643+00:00"
+      },
+      {
+        "site_id": "runpod",
+        "site_name": "RunPod",
+        "url": "https://www.runpod.io/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.18
+          },
+          "H200": {
+            "price_usd_per_hour": 5.58
+          },
+          "B200": {
+            "price_usd_per_hour": 8.64
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:22:57.082451+00:00"
+      },
+      {
+        "site_id": "together",
+        "site_name": "Together AI",
+        "url": "https://www.together.ai/pricing#gpu-clusters",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 5.49
+          },
+          "H200": {
+            "price_usd_per_hour": 6.79
+          },
+          "B200": {
+            "price_usd_per_hour": 9.95
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:23:11.944208+00:00"
+      },
+      {
+        "site_id": "nebius",
+        "site_name": "Nebius",
+        "url": "https://nebius.com/prices",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.85
+          },
+          "H200": {
+            "price_usd_per_hour": 4.5
+          },
+          "B200": {
+            "price_usd_per_hour": 7.15
+          },
+          "B300": {
+            "price_usd_per_hour": 7.85
+          }
+        },
+        "scraped_at": "2026-06-11T04:23:34.353797+00:00"
+      },
+      {
+        "site_id": "lambda",
+        "site_name": "Lambda Labs",
+        "url": "https://lambda.ai/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.99
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": 6.69
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:23:50.842424+00:00"
+      },
+      {
+        "site_id": "spheron",
+        "site_name": "Spheron",
+        "url": "https://www.spheron.network/gpu-rental/h100/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": null
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:24:30.334637+00:00"
+      },
+      {
+        "site_id": "e2e",
+        "site_name": "E2E Networks",
+        "url": "https://www.e2enetworks.com/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.6
+          },
+          "H200": {
+            "price_usd_per_hour": 3.12
+          },
+          "B200": {
+            "price_usd_per_hour": 4.58
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:24:45.637190+00:00"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-06-11T04:27:38.655851+00:00",
+    "results": [
+      {
+        "site_id": "neysa",
+        "site_name": "Neysa",
+        "url": "https://neysa.ai/pricing/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.39
+          },
+          "H200": {
+            "price_usd_per_hour": 4.73
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:25:33.514470+00:00"
+      },
+      {
+        "site_id": "verda",
+        "site_name": "Verda",
+        "url": "https://verda.com/products#H100",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.25
+          },
+          "H200": {
+            "price_usd_per_hour": 4.0
+          },
+          "B200": {
+            "price_usd_per_hour": 6.11
+          },
+          "B300": {
+            "price_usd_per_hour": 7.5
+          }
+        },
+        "scraped_at": "2026-06-11T04:25:51.780409+00:00"
+      },
+      {
+        "site_id": "runpod",
+        "site_name": "RunPod",
+        "url": "https://www.runpod.io/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": null
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:26:01.076838+00:00"
+      },
+      {
+        "site_id": "together",
+        "site_name": "Together AI",
+        "url": "https://www.together.ai/pricing#gpu-clusters",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 5.49
+          },
+          "H200": {
+            "price_usd_per_hour": 6.79
+          },
+          "B200": {
+            "price_usd_per_hour": 9.95
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:26:14.724275+00:00"
+      },
+      {
+        "site_id": "nebius",
+        "site_name": "Nebius",
+        "url": "https://nebius.com/prices",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.85
+          },
+          "H200": {
+            "price_usd_per_hour": 4.5
+          },
+          "B200": {
+            "price_usd_per_hour": 7.15
+          },
+          "B300": {
+            "price_usd_per_hour": 7.85
+          }
+        },
+        "scraped_at": "2026-06-11T04:26:36.819023+00:00"
+      },
+      {
+        "site_id": "lambda",
+        "site_name": "Lambda Labs",
+        "url": "https://lambda.ai/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.99
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": 6.69
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:26:54.865061+00:00"
+      },
+      {
+        "site_id": "spheron",
+        "site_name": "Spheron",
+        "url": "https://www.spheron.network/gpu-rental/h100/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.01
+          },
+          "H200": {
+            "price_usd_per_hour": 3.31
+          },
+          "B200": {
+            "price_usd_per_hour": 2.74
+          },
+          "B300": {
+            "price_usd_per_hour": 3.29
+          }
+        },
+        "scraped_at": "2026-06-11T04:27:19.262580+00:00"
+      },
+      {
+        "site_id": "e2e",
+        "site_name": "E2E Networks",
+        "url": "https://www.e2enetworks.com/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.6
+          },
+          "H200": {
+            "price_usd_per_hour": 3.13
+          },
+          "B200": {
+            "price_usd_per_hour": 6.5
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:27:35.650050+00:00"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-06-11T04:34:34.102982+00:00",
+    "results": [
+      {
+        "site_id": "neysa",
+        "site_name": "Neysa",
+        "url": "https://neysa.ai/pricing/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.39
+          },
+          "H200": {
+            "price_usd_per_hour": 4.73
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:32:21.536862+00:00"
+      },
+      {
+        "site_id": "verda",
+        "site_name": "Verda",
+        "url": "https://verda.com/products#H100",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.25
+          },
+          "H200": {
+            "price_usd_per_hour": 4.0
+          },
+          "B200": {
+            "price_usd_per_hour": 6.11
+          },
+          "B300": {
+            "price_usd_per_hour": 7.5
+          }
+        },
+        "scraped_at": "2026-06-11T04:32:37.296934+00:00"
+      },
+      {
+        "site_id": "runpod",
+        "site_name": "RunPod",
+        "url": "https://www.runpod.io/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": null
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:32:46.826429+00:00"
+      },
+      {
+        "site_id": "together",
+        "site_name": "Together AI",
+        "url": "https://www.together.ai/pricing#gpu-clusters",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 5.49
+          },
+          "H200": {
+            "price_usd_per_hour": 6.79
+          },
+          "B200": {
+            "price_usd_per_hour": 9.95
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:33:04.638317+00:00"
+      },
+      {
+        "site_id": "nebius",
+        "site_name": "Nebius",
+        "url": "https://nebius.com/prices",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.85
+          },
+          "H200": {
+            "price_usd_per_hour": 4.5
+          },
+          "B200": {
+            "price_usd_per_hour": 7.15
+          },
+          "B300": {
+            "price_usd_per_hour": 7.85
+          }
+        },
+        "scraped_at": "2026-06-11T04:33:26.862294+00:00"
+      },
+      {
+        "site_id": "lambda",
+        "site_name": "Lambda Labs",
+        "url": "https://lambda.ai/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.99
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": 6.69
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:33:42.117731+00:00"
+      },
+      {
+        "site_id": "spheron",
+        "site_name": "Spheron",
+        "url": "https://www.spheron.network/gpu-rental/h100/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.01
+          },
+          "H200": {
+            "price_usd_per_hour": 1.77
+          },
+          "B200": {
+            "price_usd_per_hour": 2.74
+          },
+          "B300": {
+            "price_usd_per_hour": 3.29
+          }
+        },
+        "scraped_at": "2026-06-11T04:34:12.457815+00:00"
+      },
+      {
+        "site_id": "e2e",
+        "site_name": "E2E Networks",
+        "url": "https://www.e2enetworks.com/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.6
+          },
+          "H200": {
+            "price_usd_per_hour": 3.13
+          },
+          "B200": {
+            "price_usd_per_hour": 6.5
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T04:34:31.093557+00:00"
+      }
+    ]
+  },
+  {
+    "run_at": "2026-06-11T05:14:30.014965+00:00",
+    "results": [
+      {
+        "site_id": "neysa",
+        "site_name": "Neysa",
+        "url": "https://neysa.ai/pricing/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.39
+          },
+          "H200": {
+            "price_usd_per_hour": 4.73
+          },
+          "B200": {
+            "price_usd_per_hour": null
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T05:12:18.800599+00:00"
+      },
+      {
+        "site_id": "verda",
+        "site_name": "Verda",
+        "url": "https://verda.com/products#H100",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.25
+          },
+          "H200": {
+            "price_usd_per_hour": 4.0
+          },
+          "B200": {
+            "price_usd_per_hour": 6.11
+          },
+          "B300": {
+            "price_usd_per_hour": 7.5
+          }
+        },
+        "scraped_at": "2026-06-11T05:12:40.076933+00:00"
+      },
+      {
+        "site_id": "runpod",
+        "site_name": "RunPod",
+        "url": "https://www.runpod.io/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 4.18
+          },
+          "H200": {
+            "price_usd_per_hour": 5.58
+          },
+          "B200": {
+            "price_usd_per_hour": 8.64
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T05:12:50.735830+00:00"
+      },
+      {
+        "site_id": "together",
+        "site_name": "Together AI",
+        "url": "https://www.together.ai/pricing#gpu-clusters",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 5.49
+          },
+          "H200": {
+            "price_usd_per_hour": 6.79
+          },
+          "B200": {
+            "price_usd_per_hour": 9.95
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T05:13:08.982905+00:00"
+      },
+      {
+        "site_id": "nebius",
+        "site_name": "Nebius",
+        "url": "https://nebius.com/prices",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.85
+          },
+          "H200": {
+            "price_usd_per_hour": 4.5
+          },
+          "B200": {
+            "price_usd_per_hour": 7.15
+          },
+          "B300": {
+            "price_usd_per_hour": 7.85
+          }
+        },
+        "scraped_at": "2026-06-11T05:13:20.738260+00:00"
+      },
+      {
+        "site_id": "lambda",
+        "site_name": "Lambda Labs",
+        "url": "https://lambda.ai/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 3.99
+          },
+          "H200": {
+            "price_usd_per_hour": null
+          },
+          "B200": {
+            "price_usd_per_hour": 6.69
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T05:13:37.124183+00:00"
+      },
+      {
+        "site_id": "spheron",
+        "site_name": "Spheron",
+        "url": "https://www.spheron.network/gpu-rental/h100/",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.01
+          },
+          "H200": {
+            "price_usd_per_hour": 3.31
+          },
+          "B200": {
+            "price_usd_per_hour": 2.71
+          },
+          "B300": {
+            "price_usd_per_hour": 3.29
+          }
+        },
+        "scraped_at": "2026-06-11T05:14:09.068185+00:00"
+      },
+      {
+        "site_id": "e2e",
+        "site_name": "E2E Networks",
+        "url": "https://www.e2enetworks.com/pricing",
+        "chips": {
+          "H100": {
+            "price_usd_per_hour": 2.6
+          },
+          "H200": {
+            "price_usd_per_hour": 3.13
+          },
+          "B200": {
+            "price_usd_per_hour": 6.5
+          },
+          "B300": {
+            "price_usd_per_hour": null
+          }
+        },
+        "scraped_at": "2026-06-11T05:14:26.997353+00:00"
+      }
+    ]
   }
 ]
