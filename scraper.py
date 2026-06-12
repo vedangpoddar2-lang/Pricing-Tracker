@@ -16,31 +16,40 @@ from playwright.async_api import async_playwright
 load_dotenv()
 
 # ── LLM Client setup — Gemini primary, Groq fallback ─────────────────────────
-_gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
-_groq_key   = os.environ.get("GROQ_API_KEY", "").strip()
+LLM_BACKEND = None
+_gemini_model = None
+_groq_client = None
 
-if _gemini_key:
-    import google.generativeai as genai
-    genai.configure(api_key=_gemini_key)
-    _gemini_model = genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
-        generation_config=genai.GenerationConfig(
-            response_mime_type="application/json",
-            temperature=0.0,
-        ),
-    )
-    LLM_BACKEND = "gemini"
-    print("LLM backend: Google Gemini 2.0 Flash")
-elif _groq_key:
-    from groq import AsyncGroq
-    _groq_client = AsyncGroq(api_key=_groq_key)
-    LLM_BACKEND = "groq"
-    print("LLM backend: Groq (Llama 3.3 70B) — consider adding GEMINI_API_KEY for higher limits")
-else:
-    raise ValueError(
-        "No LLM API key found. Set GEMINI_API_KEY (recommended) or GROQ_API_KEY "
-        "in your environment or GitHub secrets."
-    )
+def init_llm():
+    global LLM_BACKEND, _gemini_model, _groq_client
+    if LLM_BACKEND is not None:
+        return
+        
+    _gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    _groq_key   = os.environ.get("GROQ_API_KEY", "").strip()
+
+    if _gemini_key:
+        import google.generativeai as genai
+        genai.configure(api_key=_gemini_key)
+        _gemini_model = genai.GenerativeModel(
+            model_name="gemini-2.0-flash",
+            generation_config=genai.GenerationConfig(
+                response_mime_type="application/json",
+                temperature=0.0,
+            ),
+        )
+        LLM_BACKEND = "gemini"
+        print("LLM backend: Google Gemini 2.0 Flash")
+    elif _groq_key:
+        from groq import AsyncGroq
+        _groq_client = AsyncGroq(api_key=_groq_key)
+        LLM_BACKEND = "groq"
+        print("LLM backend: Groq (Llama 3.3 70B) — consider adding GEMINI_API_KEY for higher limits")
+    else:
+        raise ValueError(
+            "No LLM API key found. Set GEMINI_API_KEY (recommended) or GROQ_API_KEY "
+            "in your environment or GitHub secrets."
+        )
 
 # ── Target chips ──────────────────────────────────────────────────────────────
 TARGET_CHIPS = ["H100", "H200", "B200", "B300"]
@@ -284,6 +293,7 @@ SYSTEM_PROMPT = (
 
 async def _call_llm(site: dict, cleaned_text: str) -> str:
     """Call the configured LLM backend (Gemini or Groq) with retry on 429."""
+    init_llm()
     user_prompt = f"Site-specific instructions:\n{site['task']}\n\nWebpage text:\n{cleaned_text}"
 
     for _attempt in range(3):
