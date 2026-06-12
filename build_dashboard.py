@@ -827,7 +827,11 @@ def generate_html(latest, history):
     btn.innerText = "Triggering...";
     btn.disabled = true;
 
-    fetch("/api/index", {{
+    const apiUrl = window.location.hostname.includes("vercel.app")
+      ? "/api/index"
+      : "https://pricing-tracker-inxq.vercel.app/api/index";
+
+    fetch(apiUrl, {{
       method: "POST"
     }})
     .then(response => {{

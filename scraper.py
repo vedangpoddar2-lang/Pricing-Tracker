@@ -97,13 +97,13 @@ SITES = [
         "task": """
             Scroll down to the GPU Clusters pricing section.
             Extract the hourly on-demand price for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
-            - H200 SXM
-            - B200 SXM
+            - H100 SXM (listed as 'NVIDIA HGX H100')
+            - H200 SXM (listed as 'NVIDIA HGX H200')
+            - B200 SXM (listed as 'NVIDIA HGX B200')
             - B300 SXM
             IMPORTANT:
-            - SXM variants only — ignore PCIe.
-            - On-demand / pay-as-you-go hourly only. Ignore reserved or committed.
+            - HGX/SXM variants only. HGX denotes the SXM variant here. Ignore PCIe.
+            - On-demand / pay-as-you-go hourly only (listed under 'On-demand'). Ignore reserved or committed.
             - Prices in USD per hour.
             - If not listed, return null.
         """,
@@ -113,15 +113,15 @@ SITES = [
         "name": "Nebius",
         "url": "https://nebius.com/prices",
         "task": """
-            Find the GPU or compute pricing section.
-            Extract the hourly on-demand price for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
-            - H200 SXM
-            - B200 SXM
-            - B300 SXM
+            Find the NVIDIA GPU Instances pricing table.
+            Extract the hourly on-demand price (under the 'On-demand, GPU-hour' column) for:
+            - H100 SXM (listed as 'NVIDIA HGX H100')
+            - H200 SXM (listed as 'NVIDIA HGX H200')
+            - B200 SXM (listed as 'NVIDIA HGX B200')
+            - B300 SXM (listed as 'NVIDIA HGX B300')
             IMPORTANT:
-            - SXM variants only — ignore PCIe.
-            - On-demand / pay-as-you-go hourly only. Ignore reserved or committed.
+            - HGX/SXM variants only. HGX denotes the SXM variant here. Ignore PCIe.
+            - On-demand hourly pricing only. Ignore preemptible or committed rates.
             - Prices in USD per hour.
             - If not listed, return null.
         """,
@@ -131,15 +131,15 @@ SITES = [
         "name": "Lambda Labs",
         "url": "https://lambda.ai/pricing",
         "task": """
-            Find the GPU on-demand pricing table.
-            Extract the hourly on-demand price for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
+            Find the 'Instances pricing' table.
+            Extract the hourly on-demand price (under the 'PRICE/GPU/HR' column) for:
+            - H100 SXM (listed as 'NVIDIA H100 SXM')
             - H200 SXM
-            - B200 SXM
+            - B200 SXM (listed as 'NVIDIA B200 SXM6')
             - B300 SXM
             IMPORTANT:
-            - SXM variants only — ignore PCIe.
-            - On-demand / hourly only. If there are reserved or 1-year pricing columns, ignore them.
+            - SXM variants only (e.g. H100 SXM, B200 SXM6). Ignore PCIe.
+            - On-demand / hourly only. If there are reserved or cluster-duration columns, ignore them.
             - Prices in USD per hour.
             - If not listed, return null.
         """,
@@ -147,8 +147,6 @@ SITES = [
     {
         "id": "spheron",
         "name": "Spheron",
-        # Each GPU has its own dedicated page with the actual price.
-        # The catalog page /gpu-rental/ shows NO prices — only sub-pages do.
         "url": "https://www.spheron.network/gpu-rental/h100/",
         "extra_urls": [
             "https://www.spheron.network/gpu-rental/h200/",
@@ -161,12 +159,12 @@ SITES = [
             Extract the DEDICATED (on-demand, non-spot) hourly price for each GPU:
             - H100 SXM — look for it in the H100 page section (starts at $2.01/hr)
             - H200 SXM — look for it in the H200 page section (starts at $3.31/hr)
-            - B200 SXM — look for it in the B200 page section (starts at $2.68/hr)
-            - B300 SXM — look for it in the B300 page section
+            - B200 SXM — look for it in the B200 page section (starts at $2.71/hr)
+            - B300 SXM — look for it in the B300 page section (starts at $3.29/hr)
 
             IMPORTANT:
-            - Use ONLY the dedicated on-demand (non-spot) price. Spot prices are discounted and will say "spot" explicitly.
-            - SXM variants only — ignore PCIe.
+            - Use ONLY the dedicated on-demand (non-spot) price. Ignore spot prices.
+            - SXM/HGX variants only.
             - Prices in USD per hour.
             - If not found, return null.
         """,
@@ -176,17 +174,17 @@ SITES = [
         "name": "E2E Networks",
         "url": "https://www.e2enetworks.com/pricing",
         "task": """
-            Find the GPU or compute pricing section.
-            IMPORTANT CURRENCY NOTE: All prices on this site are in Indian Rupees (INR).
-            You must convert every price to USD by dividing by 96. For example: ₹2,000/hr → $20.83/hr.
-            Extract the hourly on-demand price (converted to USD) for:
-            - H100 SXM (also listed as H100 SXM4, H100 SXM5, H100 80GB SXM)
-            - H200 SXM
-            - B200 SXM
+            Find the NVIDIA GPU pricing table.
+            IMPORTANT CURRENCY NOTE: All prices on this site are in Indian Rupees (INR), denoted by '₹'.
+            You must convert every price to USD by dividing by 96. For example: ₹624.00/hr → $6.50/hr.
+            Extract the Hourly/On-Demand price (converted to USD by dividing by 96) for:
+            - H100 SXM (listed as 'NVIDIA H100')
+            - H200 SXM (listed as 'NVIDIA H200')
+            - B200 SXM (listed as 'NVIDIA B200')
             - B300 SXM
             IMPORTANT:
-            - SXM variants only — ignore PCIe.
-            - On-demand / pay-as-you-go hourly only.
+            - Treat the standard 'NVIDIA H100', 'NVIDIA H200', 'NVIDIA B200' rows as the target SXM variants.
+            - On-demand / pay-as-you-go hourly only (under 'Hourly/On-Demand' column). Ignore monthly/annually.
             - Convert INR to USD by dividing by 96.
             - Return prices in USD per hour.
             - If not listed, return null.
@@ -283,7 +281,7 @@ async def scrape_site(site: dict) -> dict:
             print(f"Navigating to {site['url']}...")
             try:
                 # Use a reasonable timeout (e.g. 15 seconds)
-                await context.goto(site["url"], wait_until="networkidle", timeout=15000)
+                await context.goto(site["url"], wait_until="domcontentloaded", timeout=15000)
             except Exception as navigation_err:
                 print(f"  Navigation warning: {navigation_err} (proceeding with current content)")
 
@@ -325,7 +323,7 @@ async def scrape_site(site: dict) -> dict:
                 for extra_url in site["extra_urls"]:
                     print(f"  Navigating to extra URL: {extra_url}...")
                     try:
-                        await context.goto(extra_url, wait_until="networkidle", timeout=15000)
+                        await context.goto(extra_url, wait_until="domcontentloaded", timeout=15000)
                     except Exception as nav_err:
                         print(f"  Extra URL navigation warning: {nav_err} (proceeding)")
                     await context.wait_for_timeout(2000)
