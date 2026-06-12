@@ -29,6 +29,19 @@ jobs:
           playwright install chromium
           playwright install-deps chromium
 
+      - name: Debug Environment
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          BROWSERBASE_API_KEY: ${{ secrets.BROWSERBASE_API_KEY }}
+        run: |
+          echo "GROQ_API_KEY set: $([ -n "$GROQ_API_KEY" ] && echo "yes" || echo "no")" > debug.txt
+          echo "BROWSERBASE_API_KEY set: $([ -n "$BROWSERBASE_API_KEY" ] && echo "yes" || echo "no")" >> debug.txt
+          git config user.name "gpu-tracker-bot"
+          git config user.email "bot@gpu-tracker"
+          git add debug.txt
+          git diff --cached --quiet || git commit -m "chore: debug secrets"
+          git push
+
       - name: Run scraper
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
