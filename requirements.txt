@@ -2,3 +2,4 @@ groq
 playwright
 python-dotenv
 browserbase
+google-generativeai

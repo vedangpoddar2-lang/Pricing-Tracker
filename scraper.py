@@ -1,5 +1,5 @@
 """
-GPU Pricing Tracker — Playwright + Groq (Llama 3.3 70B)
+GPU Pricing Tracker — Playwright + Gemini Flash (primary) / Groq (fallback)
 Targets: H100 SXM, H200 SXM, B200 SXM, B300 SXM
 Runs every 7 days via GitHub Actions
 """
@@ -12,15 +12,35 @@ from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
 from playwright.async_api import async_playwright
-from groq import AsyncGroq
 
 load_dotenv()
 
-# ── Groq Client setup ────────────────────────────────────────────────────────
-groq_key = os.environ.get("GROQ_API_KEY", "").strip()
-if not groq_key:
-    raise ValueError("GROQ_API_KEY is not set or is empty. Please set it in your environment or repository secrets.")
-groq_client = AsyncGroq(api_key=groq_key)
+# ── LLM Client setup — Gemini primary, Groq fallback ─────────────────────────
+_gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
+_groq_key   = os.environ.get("GROQ_API_KEY", "").strip()
+
+if _gemini_key:
+    import google.generativeai as genai
+    genai.configure(api_key=_gemini_key)
+    _gemini_model = genai.GenerativeModel(
+        model_name="gemini-2.0-flash",
+        generation_config=genai.GenerationConfig(
+            response_mime_type="application/json",
+            temperature=0.0,
+        ),
+    )
+    LLM_BACKEND = "gemini"
+    print("LLM backend: Google Gemini 2.0 Flash")
+elif _groq_key:
+    from groq import AsyncGroq
+    _groq_client = AsyncGroq(api_key=_groq_key)
+    LLM_BACKEND = "groq"
+    print("LLM backend: Groq (Llama 3.3 70B) — consider adding GEMINI_API_KEY for higher limits")
+else:
+    raise ValueError(
+        "No LLM API key found. Set GEMINI_API_KEY (recommended) or GROQ_API_KEY "
+        "in your environment or GitHub secrets."
+    )
 
 # ── Target chips ──────────────────────────────────────────────────────────────
 TARGET_CHIPS = ["H100", "H200", "B200", "B300"]
@@ -253,10 +273,58 @@ def clean_extracted_text(text: str) -> str:
     return "\n".join(relevant_lines)
 
 
+# ── LLM call helper ───────────────────────────────────────────────────────────
+
+SYSTEM_PROMPT = (
+    "You are a structured data extraction assistant. Extract NVIDIA GPU on-demand hourly pricing (USD) "
+    "from the webpage text. Return ONLY a raw JSON object with exactly these keys: "
+    "\"H100\", \"H200\", \"B200\", \"B300\". "
+    "Values must be numbers (USD/hr) or null. No markdown, no extra text."
+)
+
+async def _call_llm(site: dict, cleaned_text: str) -> str:
+    """Call the configured LLM backend (Gemini or Groq) with retry on 429."""
+    user_prompt = f"Site-specific instructions:\n{site['task']}\n\nWebpage text:\n{cleaned_text}"
+
+    for _attempt in range(3):
+        try:
+            if LLM_BACKEND == "gemini":
+                resp = await asyncio.to_thread(
+                    _gemini_model.generate_content,
+                    f"{SYSTEM_PROMPT}\n\n{user_prompt}"
+                )
+                return resp.text
+
+            else:  # groq
+                resp = await _groq_client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user",   "content": user_prompt},
+                    ],
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                )
+                return resp.choices[0].message.content
+
+        except Exception as llm_err:
+            err_str = str(llm_err)
+            is_rate_limit = "429" in err_str or "rate_limit" in err_str.lower() or "quota" in err_str.lower()
+            if is_rate_limit and _attempt < 2:
+                wait_match = re.search(r'try again in (\d+)m', err_str)
+                wait_secs = min(int(wait_match.group(1)) * 60 + 30 if wait_match else 90, 180)
+                print(f"  {LLM_BACKEND} rate limit (attempt {_attempt+1}/3). Waiting {wait_secs}s...")
+                await asyncio.sleep(wait_secs)
+            else:
+                raise
+
+    raise Exception(f"{LLM_BACKEND} rate limit persisted after 3 retries.")
+
+
 # ── Core scraping logic ───────────────────────────────────────────────────────
 
 async def scrape_site(site: dict) -> dict:
-    """Run Playwright to load the page, extract text, and parse pricing with Groq."""
+    """Run Playwright to load the page, extract text, and parse pricing with the LLM."""
     print(f"\n{'='*60}")
     print(f"Scraping: {site['name']} — {site['url']}")
     print(f"{'='*60}")
@@ -359,64 +427,15 @@ async def scrape_site(site: dict) -> dict:
                     if end_idx != -1:
                         cleaned_text = cleaned_text[start_idx:end_idx]
 
-            # Hard-cap to 3000 chars to stay well within Groq TPD limits
-            MAX_GROQ_CHARS = 3000
-            if len(cleaned_text) > MAX_GROQ_CHARS:
-                cleaned_text = cleaned_text[:MAX_GROQ_CHARS]
-                print(f"  Text capped at {MAX_GROQ_CHARS} chars to save tokens.")
+            # Hard-cap to 6000 chars (Gemini handles more tokens; keeps cost low for both backends)
+            MAX_CHARS = 6000
+            if len(cleaned_text) > MAX_CHARS:
+                cleaned_text = cleaned_text[:MAX_CHARS]
+                print(f"  Text capped at {MAX_CHARS} chars.")
 
-            print(f"Extracted {len(text_content)} chars. Cleaned to {len(cleaned_text)} chars. Parsing with Groq...")
+            print(f"Extracted {len(text_content)} chars. Cleaned to {len(cleaned_text)} chars. Parsing with {LLM_BACKEND}...")
 
-            # Call Groq Async client — retry up to 3 times on 429 rate-limit
-            groq_response = None
-            for _attempt in range(3):
-                try:
-                    groq_response = await groq_client.chat.completions.create(
-                        model="llama-3.3-70b-versatile",
-                        messages=[
-                            {
-                                "role": "system",
-                                "content": (
-                                    "You are a structured data extraction assistant. Your task is to extract NVIDIA GPU pricing information "
-                                    "from the webpage text provided. You must output a JSON object containing the on-demand hourly price (in USD) "
-                                    "for the following chips:\n"
-                                    "- H100 (SXM variants only)\n"
-                                    "- H200 (SXM variants only)\n"
-                                    "- B200 (SXM variants only)\n"
-                                    "- B300 (SXM variants only)\n\n"
-                                    "You must follow the site-specific extraction task instructions exactly. "
-                                    "Return ONLY a JSON object with the exact keys: \"H100\", \"H200\", \"B200\", \"B300\". "
-                                    "Do not include any extra text, comments, or markdown code blocks. Just output the raw JSON object.\n"
-                                    "Use null for any chips that are not listed on the page."
-                                )
-                            },
-                            {
-                                "role": "user",
-                                "content": f"Site-specific task details:\n{site['task']}\n\nWebpage text:\n{cleaned_text}"
-                            }
-                        ],
-                        temperature=0.0,
-                        response_format={"type": "json_object"}
-                    )
-                    break  # success — exit retry loop
-                except Exception as groq_err:
-                    err_str = str(groq_err)
-                    if "429" in err_str or "rate_limit" in err_str.lower():
-                        # Extract wait time from error message if possible
-                        wait_match = re.search(r'try again in (\d+)m', err_str)
-                        wait_secs = int(wait_match.group(1)) * 60 + 30 if wait_match else 120
-                        # Cap wait to 3 minutes so workflow doesn't time out
-                        wait_secs = min(wait_secs, 180)
-                        print(f"  Groq 429 rate limit hit (attempt {_attempt+1}/3). Waiting {wait_secs}s...")
-                        await asyncio.sleep(wait_secs)
-                    else:
-                        raise  # re-raise non-rate-limit errors immediately
-
-            if groq_response is None:
-                raise Exception("Groq rate limit persisted after 3 retries — skipping site.")
-
-            response = groq_response
-            raw_output = response.choices[0].message.content
+            raw_output = await _call_llm(site, cleaned_text)
             print(f"Raw output: {raw_output}")
 
             parsed_prices = extract_json_from_result(raw_output)
