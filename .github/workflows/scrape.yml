@@ -46,15 +46,16 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           BROWSERBASE_API_KEY: ${{ secrets.BROWSERBASE_API_KEY }}
-        run: python scraper.py
+        run: python scraper.py > scraper_log.txt 2>&1
 
       - name: Regenerate dashboard
         run: python build_dashboard.py
 
-      - name: Commit and push updated data + dashboard
+      - name: Commit and push updated data + logs + dashboard
+        if: always()
         run: |
           git config user.name  "gpu-tracker-bot"
           git config user.email "bot@gpu-tracker"
-          git add data/ docs/
-          git diff --cached --quiet || git commit -m "chore: price update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git add data/ docs/ index.html scraper_log.txt || true
+          git diff --cached --quiet || git commit -m "chore: update data/logs $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
