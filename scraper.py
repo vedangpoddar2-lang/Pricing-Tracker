@@ -526,41 +526,158 @@ def save_results(results: list[dict]):
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
+def get_initial_template():
+    results = []
+    for site in SITES:
+        chips_data = {}
+        for chip in TARGET_CHIPS:
+            chips_data[chip] = {"price_usd_per_hour": None}
+        results.append({
+            "site_id": site["id"],
+            "site_name": site["name"],
+            "url": site["url"],
+            "chips": chips_data,
+            "scraped_at": None
+        })
+    return results
+
+
 async def main():
-    print("GPU Pricing Tracker — Starting run")
-    print(f"Time: {datetime.now(timezone.utc).isoformat()}")
-    print(f"Chips: {TARGET_CHIPS}")
-    print(f"Sites: {len(SITES)}")
+    import argparse
+    import sys
 
-    results = await run_all_sites()
-    
-    # Check if we successfully extracted at least some pricing data
-    total_prices = 0
-    for r in results:
-        for chip in TARGET_CHIPS:
-            if r["chips"][chip]["price_usd_per_hour"] is not None:
-                total_prices += 1
-                
-    if total_prices == 0:
-        print("\nERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.")
-        import sys
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="GPU Pricing Scraper")
+    parser.add_argument("--init", action="store_true", help="Initialize the temp file for incremental scraping")
+    parser.add_argument("--site", type=str, help="Scrape a specific site and update temp file")
+    parser.add_argument("--finalize", action="store_true", help="Finalize incremental scraping and update data files")
+    args = parser.parse_args()
 
-    save_results(results)
+    temp_path = Path("data/current_run.json")
 
-    # Print summary table to console
-    print("\n" + "="*60)
-    print("SUMMARY")
-    print("="*60)
-    print(f"{'Site':<16} {'H100':>8} {'H200':>8} {'B200':>8} {'B300':>8}")
-    print("-"*60)
-    for r in results:
-        row = f"{r['site_name']:<16}"
-        for chip in TARGET_CHIPS:
-            val = r["chips"][chip]["price_usd_per_hour"]
-            cell = f"${val:.2f}" if val else "   N/A"
-            row += f" {cell:>8}"
-        print(row)
+    if args.init:
+        print("GPU Pricing Tracker — Initializing run")
+        print(f"Time: {datetime.now(timezone.utc).isoformat()}")
+        print(f"Chips: {TARGET_CHIPS}")
+        
+        Path("data").mkdir(exist_ok=True)
+        template = get_initial_template()
+        with open(temp_path, "w") as f:
+            json.dump(template, f, indent=2)
+        print("Initialized current_run.json.")
+        return
+
+    elif args.site:
+        site_id = args.site
+        target_site = next((s for s in SITES if s["id"] == site_id), None)
+        if not target_site:
+            print(f"Error: site '{site_id}' not found in SITES.")
+            sys.exit(1)
+            
+        print(f"Incremental Scrape: {target_site['name']}")
+        result = await scrape_site(target_site)
+        
+        # Load temp results
+        if temp_path.exists():
+            with open(temp_path) as f:
+                results = json.load(f)
+        else:
+            results = get_initial_template()
+            
+        # Update specific site result in the list
+        updated = False
+        for idx, r in enumerate(results):
+            if r["site_id"] == site_id:
+                results[idx] = result
+                updated = True
+                break
+        if not updated:
+            results.append(result)
+            
+        # Write back to temp file
+        with open(temp_path, "w") as f:
+            json.dump(results, f, indent=2)
+        print(f"Updated {site_id} in {temp_path}.")
+        return
+
+    elif args.finalize:
+        print("GPU Pricing Tracker — Finalizing run")
+        if not temp_path.exists():
+            print("Error: current_run.json not found. Cannot finalize.")
+            sys.exit(1)
+            
+        with open(temp_path) as f:
+            results = json.load(f)
+            
+        # Check if we successfully extracted at least some pricing data
+        total_prices = 0
+        for r in results:
+            for chip in TARGET_CHIPS:
+                if r["chips"][chip]["price_usd_per_hour"] is not None:
+                    total_prices += 1
+                    
+        if total_prices == 0:
+            print("\nERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.")
+            sys.exit(1)
+            
+        save_results(results)
+        
+        # Clean up temp file
+        try:
+            temp_path.unlink()
+            print("Cleaned up current_run.json")
+        except Exception as e:
+            print(f"Warning: could not delete current_run.json: {e}")
+            
+        # Print summary table to console
+        print("\n" + "="*60)
+        print("SUMMARY")
+        print("="*60)
+        print(f"{'Site':<16} {'H100':>8} {'H200':>8} {'B200':>8} {'B300':>8}")
+        print("-"*60)
+        for r in results:
+            row = f"{r['site_name']:<16}"
+            for chip in TARGET_CHIPS:
+                val = r["chips"][chip]["price_usd_per_hour"]
+                cell = f"${val:.2f}" if val else "   N/A"
+                row += f" {cell:>8}"
+            print(row)
+        return
+
+    else:
+        # Default: Run all sites sequentially
+        print("GPU Pricing Tracker — Starting run (all sites)")
+        print(f"Time: {datetime.now(timezone.utc).isoformat()}")
+        print(f"Chips: {TARGET_CHIPS}")
+        print(f"Sites: {len(SITES)}")
+
+        results = await run_all_sites()
+        
+        # Check if we successfully extracted at least some pricing data
+        total_prices = 0
+        for r in results:
+            for chip in TARGET_CHIPS:
+                if r["chips"][chip]["price_usd_per_hour"] is not None:
+                    total_prices += 1
+                    
+        if total_prices == 0:
+            print("\nERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.")
+            sys.exit(1)
+
+        save_results(results)
+
+        # Print summary table to console
+        print("\n" + "="*60)
+        print("SUMMARY")
+        print("="*60)
+        print(f"{'Site':<16} {'H100':>8} {'H200':>8} {'B200':>8} {'B300':>8}")
+        print("-"*60)
+        for r in results:
+            row = f"{r['site_name']:<16}"
+            for chip in TARGET_CHIPS:
+                val = r["chips"][chip]["price_usd_per_hour"]
+                cell = f"${val:.2f}" if val else "   N/A"
+                row += f" {cell:>8}"
+            print(row)
 
 
 if __name__ == "__main__":

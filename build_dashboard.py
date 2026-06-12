@@ -945,8 +945,6 @@ def generate_html(latest, history):
   }}
 
   let progressInterval = null;
-  let fakeProgressInterval = null;
-  let currentFakeProgress = 40;
   let clickTime = null;
 
   function checkProgress() {{
@@ -1006,52 +1004,36 @@ def generate_html(latest, history):
 
     if (activeStep) {{
       statusText = `Active step: ${{activeStep.name}}...`;
-      if (activeStep.name.includes("Checkout")) {{
-        progress = 15;
-      }} else if (activeStep.name.includes("Python")) {{
-        progress = 20;
-      }} else if (activeStep.name.includes("Install")) {{
-        progress = 30;
-      }} else if (activeStep.name.includes("scraper")) {{
-        progress = 40;
-        if (!fakeProgressInterval) {{
-          currentFakeProgress = 40;
-          fakeProgressInterval = setInterval(() => {{
-            if (currentFakeProgress < 75) {{
-              currentFakeProgress += 0.5;
-              setProgress(currentFakeProgress);
-              const providerEstimate = getEstimatedProvider(currentFakeProgress);
-              document.getElementById("progressStatus").innerText = `Scraping providers (${{providerEstimate}})...`;
-            }}
-          }}, 1000);
-        }}
-      }} else if (activeStep.name.includes("dashboard")) {{
-        progress = 85;
-        if (fakeProgressInterval) {{ clearInterval(fakeProgressInterval); fakeProgressInterval = null; }}
-      }} else if (activeStep.name.includes("Commit")) {{
-        progress = 90;
-        if (fakeProgressInterval) {{ clearInterval(fakeProgressInterval); fakeProgressInterval = null; }}
-      }}
+      const name = activeStep.name;
+      if (name.includes("Checkout")) progress = 5;
+      else if (name.includes("Python")) progress = 10;
+      else if (name.includes("Install")) progress = 15;
+      else if (name.includes("Initialize")) progress = 20;
+      else if (name.includes("Neysa")) progress = 25;
+      else if (name.includes("Verda")) progress = 33;
+      else if (name.includes("RunPod")) progress = 41;
+      else if (name.includes("Together")) progress = 49;
+      else if (name.includes("Nebius")) progress = 57;
+      else if (name.includes("Lambda")) progress = 65;
+      else if (name.includes("Spheron")) progress = 73;
+      else if (name.includes("E2E")) progress = 81;
+      else if (name.includes("Save") || name.includes("Finalize")) progress = 89;
+      else if (name.includes("dashboard") || name.includes("Regenerate")) progress = 94;
+      else if (name.includes("Commit") || name.includes("push")) progress = 98;
     }} else {{
       if (completedCount > 0) {{
-        progress = Math.min(95, completedCount * 12);
+        progress = Math.min(95, Math.round((completedCount / steps.length) * 100));
       }}
     }}
 
-    if (!fakeProgressInterval) {{
-      setProgress(progress);
-      document.getElementById("progressStatus").innerText = statusText;
-    }}
+    setProgress(progress);
+    document.getElementById("progressStatus").innerText = statusText;
   }}
 
   function hideProgress(runData) {{
     if (progressInterval) {{
       clearInterval(progressInterval);
       progressInterval = null;
-    }}
-    if (fakeProgressInterval) {{
-      clearInterval(fakeProgressInterval);
-      fakeProgressInterval = null;
     }}
     document.getElementById("progressContainer").style.display = "none";
     const btn = document.getElementById("triggerScrapeBtn");
@@ -1091,16 +1073,6 @@ def generate_html(latest, history):
     const offset = circumference - (percent / 100) * circumference;
     circle.style.strokeDashoffset = offset;
     document.getElementById("progressPercent").innerText = `${{Math.round(percent)}}%`;
-  }}
-
-  function getEstimatedProvider(pct) {{
-    if (pct < 45) return "Neysa / Verda";
-    if (pct < 50) return "RunPod";
-    if (pct < 55) return "Together AI";
-    if (pct < 60) return "Nebius";
-    if (pct < 65) return "Lambda Labs";
-    if (pct < 70) return "Spheron";
-    return "E2E Networks";
   }}
 
   function triggerWorkflow() {{

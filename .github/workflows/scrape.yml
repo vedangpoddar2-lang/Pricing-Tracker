@@ -29,10 +29,70 @@ jobs:
           playwright install chromium
           playwright install-deps chromium
 
-      - name: Run scraper
+      - name: Initialize scraper run
+        run: python scraper.py --init > scraper_log.txt 2>&1
+
+      - name: Scrape Neysa
+        continue-on-error: true
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: python scraper.py > scraper_log.txt 2>&1
+        run: python scraper.py --site neysa >> scraper_log.txt 2>&1
+
+      - name: Scrape Verda
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site verda >> scraper_log.txt 2>&1
+
+      - name: Scrape RunPod
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site runpod >> scraper_log.txt 2>&1
+
+      - name: Scrape Together AI
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site together >> scraper_log.txt 2>&1
+
+      - name: Scrape Nebius
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site nebius >> scraper_log.txt 2>&1
+
+      - name: Scrape Lambda Labs
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site lambda >> scraper_log.txt 2>&1
+
+      - name: Scrape Spheron
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site spheron >> scraper_log.txt 2>&1
+
+      - name: Scrape E2E Networks
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --site e2e >> scraper_log.txt 2>&1
+
+      - name: Save and Finalize
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scraper.py --finalize >> scraper_log.txt 2>&1
 
       - name: Regenerate dashboard
         run: python build_dashboard.py
