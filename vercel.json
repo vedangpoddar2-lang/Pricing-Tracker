@@ -9,8 +9,8 @@
       "destination": "/docs/index.html"
     },
     {
-      "source": "/(.*)",
-      "destination": "/docs/$1"
+      "source": "/index.html",
+      "destination": "/docs/index.html"
     }
   ]
 }
