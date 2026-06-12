@@ -1,0 +1,54 @@
+GPU Pricing Tracker — Starting run
+Time: 2026-06-12T05:35:43.712719+00:00
+Chips: ['H100', 'H200', 'B200', 'B300']
+Sites: 8
+
+============================================================
+Scraping: Neysa — https://neysa.ai/pricing/
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Neysa: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: Verda — https://verda.com/products#H100
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Verda: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: RunPod — https://www.runpod.io/pricing
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping RunPod: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: Together AI — https://www.together.ai/pricing#gpu-clusters
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Together AI: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: Nebius — https://nebius.com/prices
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Nebius: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: Lambda Labs — https://lambda.ai/pricing
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Lambda Labs: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: Spheron — https://www.spheron.network/gpu-rental/h100/
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping Spheron: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+============================================================
+Scraping: E2E Networks — https://www.e2enetworks.com/pricing
+============================================================
+Connecting to Browserbase cloud browser...
+  ERROR scraping E2E Networks: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+
+ERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.
