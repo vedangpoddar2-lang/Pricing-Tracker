@@ -1,0 +1,162 @@
+[
+  {
+    "site_id": "neysa",
+    "site_name": "Neysa",
+    "url": "https://neysa.ai/pricing/",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:38:44.703436+00:00"
+  },
+  {
+    "site_id": "verda",
+    "site_name": "Verda",
+    "url": "https://verda.com/products#H100",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:41:51.962006+00:00"
+  },
+  {
+    "site_id": "runpod",
+    "site_name": "RunPod",
+    "url": "https://www.runpod.io/pricing",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:44:59.327672+00:00"
+  },
+  {
+    "site_id": "together",
+    "site_name": "Together AI",
+    "url": "https://www.together.ai/pricing#gpu-clusters",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:48:06.472943+00:00"
+  },
+  {
+    "site_id": "nebius",
+    "site_name": "Nebius",
+    "url": "https://nebius.com/prices",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:51:14.813991+00:00"
+  },
+  {
+    "site_id": "lambda",
+    "site_name": "Lambda Labs",
+    "url": "https://lambda.ai/pricing",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:54:21.762741+00:00"
+  },
+  {
+    "site_id": "spheron",
+    "site_name": "Spheron",
+    "url": "https://www.spheron.network/gpu-rental/h100/",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T11:57:35.043926+00:00"
+  },
+  {
+    "site_id": "e2e",
+    "site_name": "E2E Networks",
+    "url": "https://www.e2enetworks.com/pricing",
+    "chips": {
+      "H100": {
+        "price_usd_per_hour": null
+      },
+      "H200": {
+        "price_usd_per_hour": null
+      },
+      "B200": {
+        "price_usd_per_hour": null
+      },
+      "B300": {
+        "price_usd_per_hour": null
+      }
+    },
+    "scraped_at": "2026-06-12T12:00:43.686618+00:00"
+  }
+]
