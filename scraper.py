@@ -266,17 +266,29 @@ async def scrape_site(site: dict) -> dict:
     try:
         async with async_playwright() as p:
             browserbase_key = os.environ.get("BROWSERBASE_API_KEY")
+            use_local = True
             if browserbase_key:
-                print("Connecting to Browserbase cloud browser...")
-                from browserbase import Browserbase
-                bb = Browserbase(api_key=browserbase_key)
-                session = await asyncio.to_thread(bb.sessions.create)
-                print(f"Browserbase Session Created: {session.id}")
-                browser = await p.chromium.connect_over_cdp(session.connect_url)
-                # Browserbase remote sessions have a context and page pre-opened
-                context = browser.contexts[0].pages[0]
+                try:
+                    print("Connecting to Browserbase cloud browser...")
+                    from browserbase import Browserbase
+                    bb = Browserbase(api_key=browserbase_key)
+                    session = await asyncio.to_thread(bb.sessions.create)
+                    print(f"Browserbase Session Created: {session.id}")
+                    browser = await p.chromium.connect_over_cdp(session.connect_url)
+                    # Browserbase remote sessions have a context and page pre-opened
+                    context = browser.contexts[0].pages[0]
+                    use_local = False
+                except Exception as bb_err:
+                    err_str = str(bb_err)
+                    if "402" in err_str or "Payment Required" in err_str or "limit reached" in err_str:
+                        print(f"  Browserbase quota exceeded (402). Falling back to local Chromium...")
+                    else:
+                        print(f"  Browserbase error: {bb_err}. Falling back to local Chromium...")
+                    use_local = True
             else:
                 print("BROWSERBASE_API_KEY missing, launching local Chromium...")
+
+            if use_local:
                 browser = await p.chromium.launch(headless=True)
                 context = await browser.new_page()
 
