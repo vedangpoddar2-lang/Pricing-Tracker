@@ -163,8 +163,20 @@ def build_price_table(latest, int_medians, int_averages, ind_medians, ind_averag
 
 def build_history_chart_data(history):
     """Build JS-friendly dataset for Chart.js trend lines."""
-    # Collect all run timestamps
-    labels = [h["run_at"][:10] for h in history]  # YYYY-MM-DD
+    from datetime import timezone, timedelta
+    IST = timezone(timedelta(hours=5, minutes=30))
+
+    def fmt_label(run_at_str):
+        """Format ISO timestamp as '12 Jun 11:10 IST'."""
+        dt = datetime.fromisoformat(run_at_str.replace("Z", "+00:00"))
+        ist_dt = dt.astimezone(IST)
+        day = str(ist_dt.day)          # no leading zero, cross-platform
+        mon = ist_dt.strftime("%b")    # e.g. Jun
+        hhmm = ist_dt.strftime("%H:%M")
+        return f"{day} {mon} {hhmm} IST"  # e.g. 12 Jun 11:10 IST
+
+    # Collect all run timestamps as short IST labels
+    labels = [fmt_label(h["run_at"]) for h in history]
 
     # For each chip, collect lowest clean price seen across all providers per run
     datasets = []
@@ -903,7 +915,12 @@ def generate_html(latest, history):
         }},
         scales: {{
           x: {{
-            ticks: {{ color: "#475569", font: {{ family: "'Inter', sans-serif" }} }},
+            ticks: {{
+              color: "#475569",
+              font: {{ family: "'Inter', sans-serif", size: 10 }},
+              maxRotation: 45,
+              minRotation: 30,
+            }},
             grid: {{ color: "rgba(0, 0, 0, 0.05)" }}
           }},
           y: {{

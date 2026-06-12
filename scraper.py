@@ -359,37 +359,63 @@ async def scrape_site(site: dict) -> dict:
                     if end_idx != -1:
                         cleaned_text = cleaned_text[start_idx:end_idx]
 
+            # Hard-cap to 3000 chars to stay well within Groq TPD limits
+            MAX_GROQ_CHARS = 3000
+            if len(cleaned_text) > MAX_GROQ_CHARS:
+                cleaned_text = cleaned_text[:MAX_GROQ_CHARS]
+                print(f"  Text capped at {MAX_GROQ_CHARS} chars to save tokens.")
+
             print(f"Extracted {len(text_content)} chars. Cleaned to {len(cleaned_text)} chars. Parsing with Groq...")
 
-            # Call Groq Async client
-            response = await groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a structured data extraction assistant. Your task is to extract NVIDIA GPU pricing information "
-                            "from the webpage text provided. You must output a JSON object containing the on-demand hourly price (in USD) "
-                            "for the following chips:\n"
-                            "- H100 (SXM variants only)\n"
-                            "- H200 (SXM variants only)\n"
-                            "- B200 (SXM variants only)\n"
-                            "- B300 (SXM variants only)\n\n"
-                            "You must follow the site-specific extraction task instructions exactly. "
-                            "Return ONLY a JSON object with the exact keys: \"H100\", \"H200\", \"B200\", \"B300\". "
-                            "Do not include any extra text, comments, or markdown code blocks. Just output the raw JSON object.\n"
-                            "Use null for any chips that are not listed on the page."
-                        )
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Site-specific task details:\n{site['task']}\n\nWebpage text:\n{cleaned_text}"
-                    }
-                ],
-                temperature=0.0,
-                response_format={"type": "json_object"}
-            )
+            # Call Groq Async client — retry up to 3 times on 429 rate-limit
+            groq_response = None
+            for _attempt in range(3):
+                try:
+                    groq_response = await groq_client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": (
+                                    "You are a structured data extraction assistant. Your task is to extract NVIDIA GPU pricing information "
+                                    "from the webpage text provided. You must output a JSON object containing the on-demand hourly price (in USD) "
+                                    "for the following chips:\n"
+                                    "- H100 (SXM variants only)\n"
+                                    "- H200 (SXM variants only)\n"
+                                    "- B200 (SXM variants only)\n"
+                                    "- B300 (SXM variants only)\n\n"
+                                    "You must follow the site-specific extraction task instructions exactly. "
+                                    "Return ONLY a JSON object with the exact keys: \"H100\", \"H200\", \"B200\", \"B300\". "
+                                    "Do not include any extra text, comments, or markdown code blocks. Just output the raw JSON object.\n"
+                                    "Use null for any chips that are not listed on the page."
+                                )
+                            },
+                            {
+                                "role": "user",
+                                "content": f"Site-specific task details:\n{site['task']}\n\nWebpage text:\n{cleaned_text}"
+                            }
+                        ],
+                        temperature=0.0,
+                        response_format={"type": "json_object"}
+                    )
+                    break  # success — exit retry loop
+                except Exception as groq_err:
+                    err_str = str(groq_err)
+                    if "429" in err_str or "rate_limit" in err_str.lower():
+                        # Extract wait time from error message if possible
+                        wait_match = re.search(r'try again in (\d+)m', err_str)
+                        wait_secs = int(wait_match.group(1)) * 60 + 30 if wait_match else 120
+                        # Cap wait to 3 minutes so workflow doesn't time out
+                        wait_secs = min(wait_secs, 180)
+                        print(f"  Groq 429 rate limit hit (attempt {_attempt+1}/3). Waiting {wait_secs}s...")
+                        await asyncio.sleep(wait_secs)
+                    else:
+                        raise  # re-raise non-rate-limit errors immediately
 
+            if groq_response is None:
+                raise Exception("Groq rate limit persisted after 3 retries — skipping site.")
+
+            response = groq_response
             raw_output = response.choices[0].message.content
             print(f"Raw output: {raw_output}")
 
