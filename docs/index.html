@@ -6,7 +6,7 @@
   <title>GPU-as-a-Service Pricing Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -34,52 +34,35 @@
       margin: 0 auto;
     }
     .site-header {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
+      padding: 0 0 2rem 0;
+      border-bottom: 1px solid var(--border);
       margin-bottom: 2.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
     .header-main {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       flex-wrap: wrap;
       gap: 1.5rem;
     }
-    .brand-zone {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .brand-logo {
-      background: #1a1a1a;
-      color: #ffffff;
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
     .brand-details h1 {
-      font-size: 1.35rem;
-      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
       color: var(--text);
-      letter-spacing: -0.015em;
-      line-height: 1.2;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
       margin: 0;
     }
     .subtitle-text {
       color: var(--muted);
-      font-size: 0.82rem;
-      margin-top: 0.15rem;
+      font-size: 0.95rem;
+      margin-top: 0.4rem;
     }
     .header-meta {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
     .status-badge {
@@ -88,15 +71,15 @@
       gap: 0.4rem;
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
-      font-weight: 500;
+      font-weight: 600;
       color: #166534;
     }
     .status-dot {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       background-color: #22c55e;
       border-radius: 50%;
       display: inline-block;
@@ -108,23 +91,59 @@
       100% { transform: scale(0.95); opacity: 0.8; }
     }
     .update-badge {
-      background: #f8fafc;
+      background: var(--surface);
       border: 1px solid var(--border);
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--muted);
     }
-    .header-sub {
-      border-top: 1px solid var(--border);
-      margin-top: 1rem;
-      padding-top: 0.75rem;
-      font-size: 0.78rem;
+    .header-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .pill {
+      font-size: 0.72rem;
       font-weight: 500;
       color: var(--muted);
-      letter-spacing: 0.05em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pill.chip-pill {
+      font-weight: 600;
+    }
+    .pill.chip-pill.h100 {
+      border-color: #bfdbfe;
+      color: #1e40af;
+      background: #eff6ff;
+    }
+    .pill.chip-pill.h200 {
+      border-color: #ffedd5;
+      color: #9a3412;
+      background: #fff7ed;
+    }
+    .pill.chip-pill.b200 {
+      border-color: #d1fae5;
+      color: #065f46;
+      background: #ecfdf5;
+    }
+    .pill.chip-pill.b300 {
+      border-color: #ffe4e6;
+      color: #9f1239;
+      background: #fff1f2;
+    }
+    .pill-divider {
+      color: var(--border);
+      margin: 0 0.25rem;
+      font-weight: 300;
     }
     .section-title {
       font-size: 0.85rem;
@@ -159,6 +178,9 @@
       padding: 1.1rem 1.5rem;
       text-align: center;
       border-bottom: 1px solid var(--border);
+    }
+    th:first-child, td:first-child {
+      text-align: left;
     }
     th {
       background: #fdfdfc;
@@ -288,7 +310,6 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       background: var(--surface);
-      box-shadow: var(--shadow-sm);
     }
     .progress-content {
       display: flex;
@@ -351,6 +372,9 @@
       padding: 0.9rem 1.5rem;
       border-bottom: 1px solid var(--border);
       text-align: center;
+    }
+    .flagged-table th:first-child, .flagged-table td:first-child {
+      text-align: left;
     }
     .flagged-table th {
       background: #fdfdfc;
@@ -415,12 +439,9 @@
 <div class="container">
   <header class="site-header">
     <div class="header-main">
-      <div class="brand-zone">
-        <div class="brand-logo">GPU</div>
-        <div class="brand-details">
-          <h1>Pricing Tracker</h1>
-          <p class="subtitle-text">NVIDIA SXM On-Demand GPU Instances</p>
-        </div>
+      <div class="brand-details">
+        <h1>GPU Pricing Tracker</h1>
+        <p class="subtitle-text">Real-time cost tracking for NVIDIA SXM On-Demand GPU Instances</p>
       </div>
       <div class="header-meta">
         <div class="status-badge">
@@ -432,8 +453,15 @@
         </div>
       </div>
     </div>
-    <div class="header-sub">
-      NVIDIA H100 · H200 · B200 · B300 · SXM variants · On-demand pricing · USD/hr
+    <div class="header-pills-row">
+      <span class="pill">SXM Variants</span>
+      <span class="pill">On-Demand Pricing</span>
+      <span class="pill">USD / Hour</span>
+      <span class="pill-divider">|</span>
+      <span class="pill chip-pill h100">H100</span>
+      <span class="pill chip-pill h200">H200</span>
+      <span class="pill chip-pill b200">B200</span>
+      <span class="pill chip-pill b300">B300</span>
     </div>
   </header>
 
@@ -685,47 +713,102 @@
   let currentFakeProgress = 40;
   let clickTime = null;
 
-  function initProgressTracker() {
-    checkProgress();
-    setInterval(checkProgress, 10000);
-  }
-
   function checkProgress() {
-    const owner = "vedangpoddar2-lang";
-    const repo = "Pricing-Tracker";
-    const url = `https://api.github.com/repos/${owner}/${repo}/actions/runs?per_page=1`;
+    const apiUrl = window.location.hostname.includes("vercel.app")
+      ? "/api/index"
+      : "https://pricing-tracker-inxq.vercel.app/api/index";
 
-    fetch(url)
+    fetch(apiUrl)
       .then(r => r.json())
       .then(data => {
-        const run = data.workflow_runs && data.workflow_runs[0];
-        if (!run) return;
-
-        const isRunActive = run.status === "queued" || run.status === "in_progress";
-        const isNewerThanClick = clickTime ? (new Date(run.created_at) > clickTime) : true;
-
-        if (isRunActive && isNewerThanClick) {
-          showProgress(run);
+        if (data.status === "active") {
+          showProgress(data);
+          if (!progressInterval) {
+            progressInterval = setInterval(checkProgress, 3000);
+          }
         } else {
-          hideProgress(run);
+          hideProgress(data);
         }
       })
       .catch(err => console.error("Error checking progress:", err));
   }
 
-  function showProgress(run) {
+  function initProgressTracker() {
+    checkProgress();
+    // Default slow poll fallback
+    setInterval(() => {
+      if (!progressInterval) {
+        checkProgress();
+      }
+    }, 15000);
+  }
+
+  function showProgress(runData) {
     document.getElementById("progressContainer").style.display = "block";
     const btn = document.getElementById("triggerScrapeBtn");
     btn.disabled = true;
     btn.innerText = "Scrape In Progress...";
 
-    if (!progressInterval) {
-      progressInterval = setInterval(() => checkJobSteps(run.id), 3000);
-      checkJobSteps(run.id);
+    const job = runData.jobs && runData.jobs[0];
+    if (!job) return;
+
+    const steps = job.steps || [];
+    let completedCount = 0;
+    let activeStep = null;
+
+    for (let step of steps) {
+      if (step.status === "completed") {
+        completedCount++;
+      } else if (step.status === "in_progress") {
+        activeStep = step;
+        break;
+      }
+    }
+
+    let progress = 5;
+    let statusText = "Initializing runner...";
+
+    if (activeStep) {
+      statusText = `Active step: ${activeStep.name}...`;
+      if (activeStep.name.includes("Checkout")) {
+        progress = 15;
+      } else if (activeStep.name.includes("Python")) {
+        progress = 20;
+      } else if (activeStep.name.includes("Install")) {
+        progress = 30;
+      } else if (activeStep.name.includes("scraper")) {
+        progress = 40;
+        if (!fakeProgressInterval) {
+          currentFakeProgress = 40;
+          fakeProgressInterval = setInterval(() => {
+            if (currentFakeProgress < 75) {
+              currentFakeProgress += 0.5;
+              setProgress(currentFakeProgress);
+              const providerEstimate = getEstimatedProvider(currentFakeProgress);
+              document.getElementById("progressStatus").innerText = `Scraping providers (${providerEstimate})...`;
+            }
+          }, 1000);
+        }
+      } else if (activeStep.name.includes("dashboard")) {
+        progress = 85;
+        if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
+      } else if (activeStep.name.includes("Commit")) {
+        progress = 90;
+        if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
+      }
+    } else {
+      if (completedCount > 0) {
+        progress = Math.min(95, completedCount * 12);
+      }
+    }
+
+    if (!fakeProgressInterval) {
+      setProgress(progress);
+      document.getElementById("progressStatus").innerText = statusText;
     }
   }
 
-  function hideProgress(run) {
+  function hideProgress(runData) {
     if (progressInterval) {
       clearInterval(progressInterval);
       progressInterval = null;
@@ -739,7 +822,8 @@
     btn.disabled = false;
     btn.innerText = "Trigger Scrape";
 
-    if (run && run.status === "completed" && run.conclusion === "success" && clickTime && (new Date(run.updated_at) > clickTime)) {
+    const lastRun = runData.last_run;
+    if (lastRun && lastRun.status === "completed" && lastRun.conclusion === "success" && clickTime && (new Date(lastRun.updated_at) > clickTime)) {
       clickTime = null;
       document.getElementById("progressContainer").style.display = "block";
       document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
@@ -759,87 +843,6 @@
     const offset = circumference - (percent / 100) * circumference;
     circle.style.strokeDashoffset = offset;
     document.getElementById("progressPercent").innerText = `${Math.round(percent)}%`;
-  }
-
-  function checkJobSteps(runId) {
-    const owner = "vedangpoddar2-lang";
-    const repo = "Pricing-Tracker";
-    const url = `https://api.github.com/repos/${owner}/${repo}/actions/runs/${runId}/jobs`;
-
-    fetch(url)
-      .then(r => r.json())
-      .then(data => {
-        const job = data.jobs && data.jobs[0];
-        if (!job) return;
-
-        if (job.status === "completed") {
-          if (job.conclusion === "success") {
-            setProgress(95);
-            document.getElementById("progressStatus").innerText = "Pushed changes, updating page...";
-          } else {
-            alert("Scraper run failed! Please check GitHub Actions logs.");
-            clickTime = null;
-            hideProgress();
-          }
-          return;
-        }
-
-        const steps = job.steps || [];
-        let completedCount = 0;
-        let activeStep = null;
-
-        for (let step of steps) {
-          if (step.status === "completed") {
-            completedCount++;
-          } else if (step.status === "in_progress") {
-            activeStep = step;
-            break;
-          }
-        }
-
-        let progress = 5;
-        let statusText = "Initializing runner...";
-
-        if (activeStep) {
-          statusText = `Active step: ${activeStep.name}...`;
-          if (activeStep.name.includes("Checkout")) {
-            progress = 15;
-          } else if (activeStep.name.includes("Python")) {
-            progress = 20;
-          } else if (activeStep.name.includes("Install")) {
-            progress = 30;
-          } else if (activeStep.name.includes("scraper")) {
-            progress = 40;
-            if (!fakeProgressInterval) {
-              currentFakeProgress = 40;
-              fakeProgressInterval = setInterval(() => {
-                if (currentFakeProgress < 75) {
-                  currentFakeProgress += 0.5;
-                  setProgress(currentFakeProgress);
-                  const providerEstimate = getEstimatedProvider(currentFakeProgress);
-                  document.getElementById("progressStatus").innerText = `Scraping providers (${providerEstimate})...`;
-                }
-              }, 1000);
-            }
-          } else if (activeStep.name.includes("dashboard")) {
-            progress = 85;
-            if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
-          } else if (activeStep.name.includes("Commit")) {
-            progress = 90;
-            if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
-          }
-        } else {
-          if (completedCount > 0) {
-            progress = Math.min(95, completedCount * 12);
-          }
-        }
-
-        if (!fakeProgressInterval) {
-          setProgress(progress);
-          document.getElementById("progressStatus").innerText = statusText;
-        }
-      })
-      .catch(err => console.error("Error checking jobs:", err));
   }
 
   function getEstimatedProvider(pct) {
