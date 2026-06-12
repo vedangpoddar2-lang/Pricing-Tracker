@@ -228,7 +228,9 @@ def build_flagged_section(latest, medians):
                     ratio = price / median_val
                     if ratio < 0.5 or ratio > 1.5:
                         diff_pct = (ratio - 1) * 100
-                        diff_str = f"+{diff_pct:.1f}%" if diff_pct > 0 else f"{diff_pct:.1f}%"
+                        diff_pct_val = abs(diff_pct)
+                        sign_char = "+" if diff_pct > 0 else "-"
+                        diff_str = f'<span class="deviation-sign">{sign_char}</span>{diff_pct_val:.1f}%'
                         flagged_rows += f"""
                         <tr>
                           <td>{site['site_name']}</td>
@@ -482,7 +484,7 @@ def generate_html(latest, history):
     }}
     th, td {{
       padding: 1.1rem 1.5rem;
-      text-align: left;
+      text-align: center;
       border-bottom: 1px solid var(--border);
     }}
     th {{
@@ -507,6 +509,7 @@ def generate_html(latest, history):
       padding: 0.8rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      text-align: left; /* Keep group headers left-aligned */
     }}
     tr.table-spacer-row td {{
       height: 24px;
@@ -607,6 +610,57 @@ def generate_html(latest, history):
     .sanity-wrap {{
       padding: 0; /* Let the table fill the card boundaries */
     }}
+    .progress-wrap {{
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }}
+    .progress-content {{
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem 2rem;
+    }}
+    .progress-circle-wrap {{
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }}
+    .progress-ring {{
+      transform: rotate(-90deg);
+    }}
+    .progress-ring__circle-bg {{
+      stroke: var(--bg);
+    }}
+    .progress-ring__circle {{
+      stroke-dasharray: 213.63;
+      stroke-dashoffset: 213.63;
+      transition: stroke-dashoffset 0.35s;
+      transform-origin: 50% 50%;
+      stroke-linecap: round;
+    }}
+    .progress-text {{
+      position: absolute;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }}
+    .progress-info h3 {{
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+      color: var(--text);
+    }}
+    .progress-info p {{
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }}
     .all-good {{
       color: #059669;
       display: flex;
@@ -623,7 +677,7 @@ def generate_html(latest, history):
     .flagged-table th, .flagged-table td {{
       padding: 0.9rem 1.5rem;
       border-bottom: 1px solid var(--border);
-      text-align: left;
+      text-align: center;
     }}
     .flagged-table th {{
       background: #fdfdfc;
@@ -642,7 +696,15 @@ def generate_html(latest, history):
     }}
     .flagged-price, .flagged-deviation {{
       color: #dc2626;
-      font-weight: 500; /* normal, not bold */
+      font-weight: 600;
+    }}
+    .deviation-sign {{
+      font-size: 1.35em;
+      font-weight: 800;
+      margin-right: 0.05em;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 0.9;
     }}
     .price.outlier {{
       color: #dc2626;
@@ -709,6 +771,23 @@ def generate_html(latest, history):
       <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
     </div>
   </div>
+  <!-- Progress Panel -->
+  <div id="progressContainer" class="card-wrap progress-wrap" style="display: none;">
+    <div class="progress-content">
+      <div class="progress-circle-wrap">
+        <svg class="progress-ring" width="80" height="80">
+          <circle class="progress-ring__circle-bg" stroke="#f1f5f9" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+          <circle class="progress-ring__circle" stroke="#2563eb" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+        </svg>
+        <div id="progressPercent" class="progress-text">0%</div>
+      </div>
+      <div class="progress-info">
+        <h3 id="progressTitle">Scraping in progress...</h3>
+        <p id="progressStatus">Initializing runner...</p>
+      </div>
+    </div>
+  </div>
+
   <div class="card-wrap table-wrap">
     {table_html}
   </div>
@@ -821,11 +900,185 @@ def generate_html(latest, history):
       "<p style='color:#64748b;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
   }}
 
+  let progressInterval = null;
+  let fakeProgressInterval = null;
+  let currentFakeProgress = 40;
+  let clickTime = null;
+
+  function initProgressTracker() {{
+    checkProgress();
+    setInterval(checkProgress, 10000);
+  }}
+
+  function checkProgress() {{
+    const owner = "vedangpoddar2-lang";
+    const repo = "Pricing-Tracker";
+    const url = `https://api.github.com/repos/${{owner}}/${{repo}}/actions/runs?per_page=1`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {{
+        const run = data.workflow_runs && data.workflow_runs[0];
+        if (!run) return;
+
+        const isRunActive = run.status === "queued" || run.status === "in_progress";
+        const isNewerThanClick = clickTime ? (new Date(run.created_at) > clickTime) : true;
+
+        if (isRunActive && isNewerThanClick) {{
+          showProgress(run);
+        }} else {{
+          hideProgress(run);
+        }}
+      }})
+      .catch(err => console.error("Error checking progress:", err));
+  }}
+
+  function showProgress(run) {{
+    document.getElementById("progressContainer").style.display = "block";
+    const btn = document.getElementById("triggerScrapeBtn");
+    btn.disabled = true;
+    btn.innerText = "Scrape In Progress...";
+
+    if (!progressInterval) {{
+      progressInterval = setInterval(() => checkJobSteps(run.id), 3000);
+      checkJobSteps(run.id);
+    }}
+  }}
+
+  function hideProgress(run) {{
+    if (progressInterval) {{
+      clearInterval(progressInterval);
+      progressInterval = null;
+    }}
+    if (fakeProgressInterval) {{
+      clearInterval(fakeProgressInterval);
+      fakeProgressInterval = null;
+    }}
+    document.getElementById("progressContainer").style.display = "none";
+    const btn = document.getElementById("triggerScrapeBtn");
+    btn.disabled = false;
+    btn.innerText = "Trigger Scrape";
+
+    if (run && run.status === "completed" && run.conclusion === "success" && clickTime && (new Date(run.updated_at) > clickTime)) {{
+      clickTime = null;
+      document.getElementById("progressContainer").style.display = "block";
+      document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
+      setProgress(100);
+      setTimeout(() => {{
+        window.location.reload();
+      }}, 3000);
+    }}
+  }}
+
+  function setProgress(percent) {{
+    const circle = document.querySelector('.progress-ring__circle');
+    if (!circle) return;
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    circle.style.strokeDasharray = `${{circumference}} ${{circumference}}`;
+    const offset = circumference - (percent / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+    document.getElementById("progressPercent").innerText = `${{Math.round(percent)}}%`;
+  }}
+
+  function checkJobSteps(runId) {{
+    const owner = "vedangpoddar2-lang";
+    const repo = "Pricing-Tracker";
+    const url = `https://api.github.com/repos/${{owner}}/${{repo}}/actions/runs/${{runId}}/jobs`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {{
+        const job = data.jobs && data.jobs[0];
+        if (!job) return;
+
+        if (job.status === "completed") {{
+          if (job.conclusion === "success") {{
+            setProgress(95);
+            document.getElementById("progressStatus").innerText = "Pushed changes, updating page...";
+          }} else {{
+            alert("Scraper run failed! Please check GitHub Actions logs.");
+            clickTime = null;
+            hideProgress();
+          }}
+          return;
+        }}
+
+        const steps = job.steps || [];
+        let completedCount = 0;
+        let activeStep = null;
+
+        for (let step of steps) {{
+          if (step.status === "completed") {{
+            completedCount++;
+          }} else if (step.status === "in_progress") {{
+            activeStep = step;
+            break;
+          }}
+        }}
+
+        let progress = 5;
+        let statusText = "Initializing runner...";
+
+        if (activeStep) {{
+          statusText = `Active step: ${{activeStep.name}}...`;
+          if (activeStep.name.includes("Checkout")) {{
+            progress = 15;
+          }} else if (activeStep.name.includes("Python")) {{
+            progress = 20;
+          }} else if (activeStep.name.includes("Install")) {{
+            progress = 30;
+          }} else if (activeStep.name.includes("scraper")) {{
+            progress = 40;
+            if (!fakeProgressInterval) {{
+              currentFakeProgress = 40;
+              fakeProgressInterval = setInterval(() => {{
+                if (currentFakeProgress < 75) {{
+                  currentFakeProgress += 0.5;
+                  setProgress(currentFakeProgress);
+                  const providerEstimate = getEstimatedProvider(currentFakeProgress);
+                  document.getElementById("progressStatus").innerText = `Scraping providers (${{providerEstimate}})...`;
+                }}
+              }}, 1000);
+            }}
+          }} else if (activeStep.name.includes("dashboard")) {{
+            progress = 85;
+            if (fakeProgressInterval) {{ clearInterval(fakeProgressInterval); fakeProgressInterval = null; }}
+          }} else if (activeStep.name.includes("Commit")) {{
+            progress = 90;
+            if (fakeProgressInterval) {{ clearInterval(fakeProgressInterval); fakeProgressInterval = null; }}
+          }}
+        }} else {{
+          if (completedCount > 0) {{
+            progress = Math.min(95, completedCount * 12);
+          }}
+        }}
+
+        if (!fakeProgressInterval) {{
+          setProgress(progress);
+          document.getElementById("progressStatus").innerText = statusText;
+        }}
+      }})
+      .catch(err => console.error("Error checking jobs:", err));
+  }}
+
+  function getEstimatedProvider(pct) {{
+    if (pct < 45) return "Neysa / Verda";
+    if (pct < 50) return "RunPod";
+    if (pct < 55) return "Together AI";
+    if (pct < 60) return "Nebius";
+    if (pct < 65) return "Lambda Labs";
+    if (pct < 70) return "Spheron";
+    return "E2E Networks";
+  }}
+
   function triggerWorkflow() {{
     const btn = document.getElementById("triggerScrapeBtn");
     const originalText = btn.innerText;
     btn.innerText = "Triggering...";
     btn.disabled = true;
+
+    clickTime = new Date();
 
     const apiUrl = window.location.hostname.includes("vercel.app")
       ? "/api/index"
@@ -839,10 +1092,9 @@ def generate_html(latest, history):
         btn.innerText = "✓ Triggered!";
         btn.classList.add("btn-success");
         setTimeout(() => {{
-          btn.innerText = originalText;
           btn.classList.remove("btn-success");
-          btn.disabled = false;
-        }}, 3000);
+          checkProgress();
+        }}, 1000);
       }} else {{
         return response.json().then(data => {{
           throw new Error(data.error || "HTTP " + response.status);
@@ -856,8 +1108,11 @@ def generate_html(latest, history):
       alert("Failed to trigger scrape: " + err.message + "\\n\\nMake sure GITHUB_PAT is set in Vercel's Environment Variables.");
       btn.innerText = originalText;
       btn.disabled = false;
+      clickTime = null;
     }});
   }}
+
+  document.addEventListener("DOMContentLoaded", initProgressTracker);
 </script>
 
 </body>

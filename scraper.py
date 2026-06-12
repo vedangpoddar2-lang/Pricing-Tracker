@@ -17,7 +17,10 @@ from groq import AsyncGroq
 load_dotenv()
 
 # ── Groq Client setup ────────────────────────────────────────────────────────
-groq_client = AsyncGroq(api_key=os.environ["GROQ_API_KEY"])
+groq_key = os.environ.get("GROQ_API_KEY", "").strip()
+if not groq_key:
+    raise ValueError("GROQ_API_KEY is not set or is empty. Please set it in your environment or repository secrets.")
+groq_client = AsyncGroq(api_key=groq_key)
 
 # ── Target chips ──────────────────────────────────────────────────────────────
 TARGET_CHIPS = ["H100", "H200", "B200", "B300"]
@@ -473,6 +476,19 @@ async def main():
     print(f"Sites: {len(SITES)}")
 
     results = await run_all_sites()
+    
+    # Check if we successfully extracted at least some pricing data
+    total_prices = 0
+    for r in results:
+        for chip in TARGET_CHIPS:
+            if r["chips"][chip]["price_usd_per_hour"] is not None:
+                total_prices += 1
+                
+    if total_prices == 0:
+        print("\nERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.")
+        import sys
+        sys.exit(1)
+
     save_results(results)
 
     # Print summary table to console

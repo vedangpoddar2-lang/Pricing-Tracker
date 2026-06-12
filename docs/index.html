@@ -157,7 +157,7 @@
     }
     th, td {
       padding: 1.1rem 1.5rem;
-      text-align: left;
+      text-align: center;
       border-bottom: 1px solid var(--border);
     }
     th {
@@ -182,6 +182,7 @@
       padding: 0.8rem 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      text-align: left; /* Keep group headers left-aligned */
     }
     tr.table-spacer-row td {
       height: 24px;
@@ -282,6 +283,57 @@
     .sanity-wrap {
       padding: 0; /* Let the table fill the card boundaries */
     }
+    .progress-wrap {
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+    .progress-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem 2rem;
+    }
+    .progress-circle-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    .progress-ring__circle-bg {
+      stroke: var(--bg);
+    }
+    .progress-ring__circle {
+      stroke-dasharray: 213.63;
+      stroke-dashoffset: 213.63;
+      transition: stroke-dashoffset 0.35s;
+      transform-origin: 50% 50%;
+      stroke-linecap: round;
+    }
+    .progress-text {
+      position: absolute;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .progress-info h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+      color: var(--text);
+    }
+    .progress-info p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
     .all-good {
       color: #059669;
       display: flex;
@@ -298,7 +350,7 @@
     .flagged-table th, .flagged-table td {
       padding: 0.9rem 1.5rem;
       border-bottom: 1px solid var(--border);
-      text-align: left;
+      text-align: center;
     }
     .flagged-table th {
       background: #fdfdfc;
@@ -317,7 +369,15 @@
     }
     .flagged-price, .flagged-deviation {
       color: #dc2626;
-      font-weight: 500; /* normal, not bold */
+      font-weight: 600;
+    }
+    .deviation-sign {
+      font-size: 1.35em;
+      font-weight: 800;
+      margin-right: 0.05em;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 0.9;
     }
     .price.outlier {
       color: #dc2626;
@@ -368,7 +428,7 @@
           <span class="status-text">Active Monitoring</span>
         </div>
         <div class="update-badge">
-          Last Updated: June 12, 2026 at 10:07 AM IST
+          Last Updated: June 12, 2026 at 10:17 AM IST
         </div>
       </div>
     </div>
@@ -384,86 +444,138 @@
       <button id="copyTableBtn" onclick="copyTableToClipboard()" class="btn-copy">Copy to Excel</button>
     </div>
   </div>
+  <!-- Progress Panel -->
+  <div id="progressContainer" class="card-wrap progress-wrap" style="display: none;">
+    <div class="progress-content">
+      <div class="progress-circle-wrap">
+        <svg class="progress-ring" width="80" height="80">
+          <circle class="progress-ring__circle-bg" stroke="#f1f5f9" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+          <circle class="progress-ring__circle" stroke="#2563eb" stroke-width="6" fill="transparent" r="34" cx="40" cy="40"/>
+        </svg>
+        <div id="progressPercent" class="progress-text">0%</div>
+      </div>
+      <div class="progress-info">
+        <h3 id="progressTitle">Scraping in progress...</h3>
+        <p id="progressStatus">Initializing runner...</p>
+      </div>
+    </div>
+  </div>
+
   <div class="card-wrap table-wrap">
     <table id="pricingTable"><thead><tr><th>Provider</th><th>H100 SXM</th><th>H200 SXM</th><th>B200 SXM</th><th>B300 SXM</th></tr></thead><tbody><tr class="group-header-row"><td colspan="5"><strong>International Providers</strong></td></tr>
         <tr>
           <td class="provider">
             <a href="https://verda.com/products#H100" target="_blank">Verda</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.25</span></td><td><span class="price">$4.00</span></td><td><span class="price">$6.11</span></td><td><span class="price">$7.50</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.runpod.io/pricing" target="_blank">RunPod</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$4.18</span></td><td><span class="price">$5.58</span></td><td><span class="price">$8.64</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$5.49</span></td><td><span class="price outlier">$6.79</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://nebius.com/prices" target="_blank">Nebius</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.85</span></td><td><span class="price">$4.50</span></td><td><span class="price">$7.15</span></td><td><span class="price">$7.85</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://lambda.ai/pricing" target="_blank">Lambda Labs</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$3.99</span></td><td><span class="na">—</span></td><td><span class="price">$6.69</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/h100/" target="_blank">Spheron</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price outlier">$1.43</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$3.31</span></td><td><span class="price">$5.34</span></td><td><span class="price outlier">$3.29</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td>
         </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Average</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$4.15</td><td>$4.35</td><td>$7.31</td><td>$7.67</td>
     </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Median</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$3.92</td><td>$4.50</td><td>$6.92</td><td>$7.50</td>
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
         <tr>
           <td class="provider">
             <a href="https://neysa.ai/pricing/" target="_blank">Neysa</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$4.39</span></td><td><span class="price">$4.73</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
             <a href="https://www.e2enetworks.com/pricing" target="_blank">E2E Networks</a>
           </td>
-          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$2.60</span></td><td><span class="price">$3.13</span></td><td><span class="price">$6.50</span></td><td><span class="na">—</span></td>
         </tr>
     <tr class="summary-row ind-summary-row">
       <td class="provider"><strong>Indian Average</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$3.50</td><td>$3.93</td><td>$6.50</td><td>—</td>
     </tr>
     <tr class="summary-row ind-summary-row">
       <td class="provider"><strong>Indian Median</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$3.50</td><td>$3.93</td><td>$6.50</td><td>—</td>
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Average (All)</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$3.96</td><td>$4.21</td><td>$7.20</td><td>$7.67</td>
     </tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Median (All)</strong></td>
-      <td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>$3.92</td><td>$4.50</td><td>$6.69</td><td>$7.50</td>
     </tr></tbody></table>
   </div>
   <p class="table-note">* Note: Averages (but not medians) exclude pricing anomalies that are more than 50% above or below the overall median. Outliers are highlighted in red.</p>
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
-    <p class="all-good">✓ All extracted prices are within normal expected ranges.</p>
+    
+    <table class="flagged-table">
+      <thead>
+        <tr>
+          <th>Provider</th>
+          <th>GPU Chip</th>
+          <th>Scraped Price</th>
+          <th>All-Player Median</th>
+          <th>Deviation</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+                        <tr>
+                          <td>Together AI</td>
+                          <td>H200 SXM</td>
+                          <td class="flagged-price">$6.79</td>
+                          <td>$4.50</td>
+                          <td class="flagged-deviation"><span class="deviation-sign">+</span>50.9%</td>
+                        </tr>
+                        <tr>
+                          <td>Spheron</td>
+                          <td>H100 SXM</td>
+                          <td class="flagged-price">$1.43</td>
+                          <td>$3.92</td>
+                          <td class="flagged-deviation"><span class="deviation-sign">-</span>63.5%</td>
+                        </tr>
+                        <tr>
+                          <td>Spheron</td>
+                          <td>B300 SXM</td>
+                          <td class="flagged-price">$3.29</td>
+                          <td>$7.50</td>
+                          <td class="flagged-deviation"><span class="deviation-sign">-</span>56.1%</td>
+                        </tr>
+      </tbody>
+    </table>
   </div>
 
   <p class="section-title">Price Trends — Lowest Available per Chip</p>
@@ -527,8 +639,8 @@
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["2026-06-10", "2026-06-10", "2026-06-10", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-12", "2026-06-12"],
-        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 2.9, 2.6, 2.01, 2.01, 2.01, 3.25, 2.01, null], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31, 3.12, 3.13, 3.13, 3.13, 4.0, 3.13, null], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 6.11, 4.58, 6.11, 6.11, 6.11, 6.11, 5.34, null], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, null], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
+        labels: ["2026-06-10", "2026-06-10", "2026-06-10", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-12", "2026-06-12", "2026-06-12"],
+        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 2.9, 2.6, 2.01, 2.01, 2.01, 3.25, 2.01, null, 2.6], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31, 3.12, 3.13, 3.13, 3.13, 4.0, 3.13, null, 3.13], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 6.11, 4.58, 6.11, 6.11, 6.11, 6.11, 5.34, null, 5.34], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, null, 7.5], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
       },
       options: {
         responsive: true,
@@ -568,11 +680,185 @@
       "<p style='color:#64748b;text-align:center;padding:2rem'>Trend chart will appear after the second run.</p>";
   }
 
+  let progressInterval = null;
+  let fakeProgressInterval = null;
+  let currentFakeProgress = 40;
+  let clickTime = null;
+
+  function initProgressTracker() {
+    checkProgress();
+    setInterval(checkProgress, 10000);
+  }
+
+  function checkProgress() {
+    const owner = "vedangpoddar2-lang";
+    const repo = "Pricing-Tracker";
+    const url = `https://api.github.com/repos/${owner}/${repo}/actions/runs?per_page=1`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const run = data.workflow_runs && data.workflow_runs[0];
+        if (!run) return;
+
+        const isRunActive = run.status === "queued" || run.status === "in_progress";
+        const isNewerThanClick = clickTime ? (new Date(run.created_at) > clickTime) : true;
+
+        if (isRunActive && isNewerThanClick) {
+          showProgress(run);
+        } else {
+          hideProgress(run);
+        }
+      })
+      .catch(err => console.error("Error checking progress:", err));
+  }
+
+  function showProgress(run) {
+    document.getElementById("progressContainer").style.display = "block";
+    const btn = document.getElementById("triggerScrapeBtn");
+    btn.disabled = true;
+    btn.innerText = "Scrape In Progress...";
+
+    if (!progressInterval) {
+      progressInterval = setInterval(() => checkJobSteps(run.id), 3000);
+      checkJobSteps(run.id);
+    }
+  }
+
+  function hideProgress(run) {
+    if (progressInterval) {
+      clearInterval(progressInterval);
+      progressInterval = null;
+    }
+    if (fakeProgressInterval) {
+      clearInterval(fakeProgressInterval);
+      fakeProgressInterval = null;
+    }
+    document.getElementById("progressContainer").style.display = "none";
+    const btn = document.getElementById("triggerScrapeBtn");
+    btn.disabled = false;
+    btn.innerText = "Trigger Scrape";
+
+    if (run && run.status === "completed" && run.conclusion === "success" && clickTime && (new Date(run.updated_at) > clickTime)) {
+      clickTime = null;
+      document.getElementById("progressContainer").style.display = "block";
+      document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
+      setProgress(100);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    }
+  }
+
+  function setProgress(percent) {
+    const circle = document.querySelector('.progress-ring__circle');
+    if (!circle) return;
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    const offset = circumference - (percent / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+    document.getElementById("progressPercent").innerText = `${Math.round(percent)}%`;
+  }
+
+  function checkJobSteps(runId) {
+    const owner = "vedangpoddar2-lang";
+    const repo = "Pricing-Tracker";
+    const url = `https://api.github.com/repos/${owner}/${repo}/actions/runs/${runId}/jobs`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const job = data.jobs && data.jobs[0];
+        if (!job) return;
+
+        if (job.status === "completed") {
+          if (job.conclusion === "success") {
+            setProgress(95);
+            document.getElementById("progressStatus").innerText = "Pushed changes, updating page...";
+          } else {
+            alert("Scraper run failed! Please check GitHub Actions logs.");
+            clickTime = null;
+            hideProgress();
+          }
+          return;
+        }
+
+        const steps = job.steps || [];
+        let completedCount = 0;
+        let activeStep = null;
+
+        for (let step of steps) {
+          if (step.status === "completed") {
+            completedCount++;
+          } else if (step.status === "in_progress") {
+            activeStep = step;
+            break;
+          }
+        }
+
+        let progress = 5;
+        let statusText = "Initializing runner...";
+
+        if (activeStep) {
+          statusText = `Active step: ${activeStep.name}...`;
+          if (activeStep.name.includes("Checkout")) {
+            progress = 15;
+          } else if (activeStep.name.includes("Python")) {
+            progress = 20;
+          } else if (activeStep.name.includes("Install")) {
+            progress = 30;
+          } else if (activeStep.name.includes("scraper")) {
+            progress = 40;
+            if (!fakeProgressInterval) {
+              currentFakeProgress = 40;
+              fakeProgressInterval = setInterval(() => {
+                if (currentFakeProgress < 75) {
+                  currentFakeProgress += 0.5;
+                  setProgress(currentFakeProgress);
+                  const providerEstimate = getEstimatedProvider(currentFakeProgress);
+                  document.getElementById("progressStatus").innerText = `Scraping providers (${providerEstimate})...`;
+                }
+              }, 1000);
+            }
+          } else if (activeStep.name.includes("dashboard")) {
+            progress = 85;
+            if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
+          } else if (activeStep.name.includes("Commit")) {
+            progress = 90;
+            if (fakeProgressInterval) { clearInterval(fakeProgressInterval); fakeProgressInterval = null; }
+          }
+        } else {
+          if (completedCount > 0) {
+            progress = Math.min(95, completedCount * 12);
+          }
+        }
+
+        if (!fakeProgressInterval) {
+          setProgress(progress);
+          document.getElementById("progressStatus").innerText = statusText;
+        }
+      })
+      .catch(err => console.error("Error checking jobs:", err));
+  }
+
+  function getEstimatedProvider(pct) {
+    if (pct < 45) return "Neysa / Verda";
+    if (pct < 50) return "RunPod";
+    if (pct < 55) return "Together AI";
+    if (pct < 60) return "Nebius";
+    if (pct < 65) return "Lambda Labs";
+    if (pct < 70) return "Spheron";
+    return "E2E Networks";
+  }
+
   function triggerWorkflow() {
     const btn = document.getElementById("triggerScrapeBtn");
     const originalText = btn.innerText;
     btn.innerText = "Triggering...";
     btn.disabled = true;
+
+    clickTime = new Date();
 
     const apiUrl = window.location.hostname.includes("vercel.app")
       ? "/api/index"
@@ -586,10 +872,9 @@
         btn.innerText = "✓ Triggered!";
         btn.classList.add("btn-success");
         setTimeout(() => {
-          btn.innerText = originalText;
           btn.classList.remove("btn-success");
-          btn.disabled = false;
-        }, 3000);
+          checkProgress();
+        }, 1000);
       } else {
         return response.json().then(data => {
           throw new Error(data.error || "HTTP " + response.status);
@@ -603,8 +888,11 @@
       alert("Failed to trigger scrape: " + err.message + "\n\nMake sure GITHUB_PAT is set in Vercel's Environment Variables.");
       btn.innerText = originalText;
       btn.disabled = false;
+      clickTime = null;
     });
   }
+
+  document.addEventListener("DOMContentLoaded", initProgressTracker);
 </script>
 
 </body>
