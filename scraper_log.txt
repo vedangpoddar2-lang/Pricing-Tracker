@@ -1,54 +1,129 @@
 GPU Pricing Tracker — Starting run
-Time: 2026-06-12T05:35:43.712719+00:00
+Time: 2026-06-12T05:40:10.357535+00:00
 Chips: ['H100', 'H200', 'B200', 'B300']
 Sites: 8
 
 ============================================================
 Scraping: Neysa — https://neysa.ai/pricing/
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Neysa: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://neysa.ai/pricing/...
+Extracted 4828 chars. Cleaned to 3325 chars. Parsing with Groq...
+Raw output: {
+  "H100": 4.39,
+   "H200": 4.73,
+   "B200": null,
+   "B300": null
+}
 
 ============================================================
 Scraping: Verda — https://verda.com/products#H100
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Verda: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://verda.com/products#H100...
+Extracted 12460 chars. Cleaned to 9273 chars. Parsing with Groq...
+Raw output: {
+  "H100": 3.25,
+   "H200": 4.00,
+   "B200": 6.11,
+   "B300": 7.50
+}
 
 ============================================================
 Scraping: RunPod — https://www.runpod.io/pricing
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping RunPod: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://www.runpod.io/pricing...
+Extracted 9324 chars. Cleaned to 652 chars. Parsing with Groq...
+Raw output: {
+  "H100": 4.18,
+   "H200": 5.58,
+   "B200": 8.64,
+   "B300": null
+}
 
 ============================================================
 Scraping: Together AI — https://www.together.ai/pricing#gpu-clusters
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Together AI: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://www.together.ai/pricing#gpu-clusters...
+Extracted 4742 chars. Cleaned to 2494 chars. Parsing with Groq...
+Raw output: {
+  "H100": 5.49,
+   "H200": 6.79,
+   "B200": 9.95,
+   "B300": null
+}
 
 ============================================================
 Scraping: Nebius — https://nebius.com/prices
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Nebius: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://nebius.com/prices...
+Extracted 5909 chars. Cleaned to 2560 chars. Parsing with Groq...
+Raw output: {
+  "H100": 3.85,
+   "H200": 4.50,
+   "B200": 7.15,
+   "B300": 7.85
+}
 
 ============================================================
 Scraping: Lambda Labs — https://lambda.ai/pricing
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Lambda Labs: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://lambda.ai/pricing...
+Extracted 1775 chars. Cleaned to 1253 chars. Parsing with Groq...
+Raw output: {
+  "H100": 3.99,
+   "H200": null,
+   "B200": 6.69,
+   "B300": null
+}
 
 ============================================================
 Scraping: Spheron — https://www.spheron.network/gpu-rental/h100/
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping Spheron: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://www.spheron.network/gpu-rental/h100/...
+  Navigating to extra URL: https://www.spheron.network/gpu-rental/h200/...
+  Navigating to extra URL: https://www.spheron.network/gpu-rental/b200/...
+  Navigating to extra URL: https://www.spheron.network/gpu-rental/b300/...
+Extracted 16207 chars. Cleaned to 13671 chars. Parsing with Groq...
+Raw output: {
+  "H100": 2.01,
+   "H200": 3.31,
+   "B200": 2.74,
+   "B300": 3.29
+}
 
 ============================================================
 Scraping: E2E Networks — https://www.e2enetworks.com/pricing
 ============================================================
-Connecting to Browserbase cloud browser...
-  ERROR scraping E2E Networks: Error code: 402 - {'statusCode': 402, 'error': 'Payment Required', 'message': 'Free plan browser minutes limit reached. Please upgrade your account at https://browserbase.com/plans'}
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://www.e2enetworks.com/pricing...
+Extracted 3682 chars. Cleaned to 2020 chars. Parsing with Groq...
+Raw output: {
+  "H100": 2.90,
+   "H200": 3.49,
+   "B200": 6.50,
+   "B300": null
+}
 
-ERROR: Scraper failed to extract any prices. Exiting to prevent overwriting dashboard data with nulls.
+Snapshot saved: data/snapshot_20260612_054120.json
+Latest saved:  data/latest.json
+History saved: data/history.json
+
+============================================================
+SUMMARY
+============================================================
+Site                 H100     H200     B200     B300
+------------------------------------------------------------
+Neysa               $4.39    $4.73      N/A      N/A
+Verda               $3.25    $4.00    $6.11    $7.50
+RunPod              $4.18    $5.58    $8.64      N/A
+Together AI         $5.49    $6.79    $9.95      N/A
+Nebius              $3.85    $4.50    $7.15    $7.85
+Lambda Labs         $3.99      N/A    $6.69      N/A
+Spheron             $2.01    $3.31    $2.74    $3.29
+E2E Networks        $2.90    $3.49    $6.50      N/A
