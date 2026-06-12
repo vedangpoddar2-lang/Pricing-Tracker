@@ -1047,11 +1047,18 @@ def generate_html(latest, history):
       if (lastRun.conclusion === "success") {{
         clickTime = null;
         document.getElementById("progressContainer").style.display = "block";
-        document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
+        let secondsLeft = 15;
+        const countdownFn = () => {{
+          document.getElementById("progressStatus").innerText = `✓ Scrape complete! Reloading in ${{secondsLeft}}s for new prices...`;
+          if (secondsLeft > 0) {{
+            secondsLeft--;
+            setTimeout(countdownFn, 1000);
+          }} else {{
+            window.location.reload();
+          }}
+        }};
         setProgress(100);
-        setTimeout(() => {{
-          window.location.reload();
-        }}, 3000);
+        countdownFn();
       }} else {{
         clickTime = null;
         alert("❌ Scrape failed! Please check GitHub Actions logs or scraper_log.txt for details.");
