@@ -845,8 +845,7 @@ def generate_html(latest, history):
 
   <footer>
     Updated automatically every 7 days via GitHub Actions ·
-    Powered by Playwright + Browserbase + Llama 3.3 70B (Groq) ·
-    <a href="https://github.com" target="_blank">View source</a>
+    Powered by Playwright + Gemini 2.0 Flash
   </footer>
 </div>
 
