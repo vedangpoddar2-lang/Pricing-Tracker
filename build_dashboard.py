@@ -1043,14 +1043,19 @@ def generate_html(latest, history):
     btn.innerText = "Trigger Scrape";
 
     const lastRun = runData.last_run;
-    if (lastRun && lastRun.status === "completed" && lastRun.conclusion === "success" && clickTime && (new Date(lastRun.updated_at) > clickTime)) {{
-      clickTime = null;
-      document.getElementById("progressContainer").style.display = "block";
-      document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
-      setProgress(100);
-      setTimeout(() => {{
-        window.location.reload();
-      }}, 3000);
+    if (lastRun && lastRun.status === "completed" && clickTime && (new Date(lastRun.updated_at) > clickTime)) {{
+      if (lastRun.conclusion === "success") {{
+        clickTime = null;
+        document.getElementById("progressContainer").style.display = "block";
+        document.getElementById("progressStatus").innerText = "✓ Scrape complete! Reloading page to show new prices...";
+        setProgress(100);
+        setTimeout(() => {{
+          window.location.reload();
+        }}, 3000);
+      }} else {{
+        clickTime = null;
+        alert("❌ Scrape failed! Please check GitHub Actions logs or scraper_log.txt for details.");
+      }}
     }}
   }}
 
