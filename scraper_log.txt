@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py", line 40, in <module>
+    raise ValueError(
+ValueError: No LLM API key found. Set GEMINI_API_KEY (recommended) or GROQ_API_KEY in your environment or GitHub secrets.
