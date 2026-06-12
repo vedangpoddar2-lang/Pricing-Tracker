@@ -1,5 +1,5 @@
 GPU Pricing Tracker — Starting run
-Time: 2026-06-12T05:40:10.357535+00:00
+Time: 2026-06-12T05:52:20.231028+00:00
 Chips: ['H100', 'H200', 'B200', 'B300']
 Sites: 8
 
@@ -90,12 +90,7 @@ Navigating to https://www.spheron.network/gpu-rental/h100/...
   Navigating to extra URL: https://www.spheron.network/gpu-rental/b200/...
   Navigating to extra URL: https://www.spheron.network/gpu-rental/b300/...
 Extracted 16207 chars. Cleaned to 13671 chars. Parsing with Groq...
-Raw output: {
-  "H100": 2.01,
-   "H200": 3.31,
-   "B200": 2.74,
-   "B300": 3.29
-}
+  ERROR scraping Spheron: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97833, Requested 4534. Please try again in 34m5.088s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: E2E Networks — https://www.e2enetworks.com/pricing
@@ -110,7 +105,7 @@ Raw output: {
    "B300": null
 }
 
-Snapshot saved: data/snapshot_20260612_054120.json
+Snapshot saved: data/snapshot_20260612_055329.json
 Latest saved:  data/latest.json
 History saved: data/history.json
 
@@ -125,5 +120,5 @@ RunPod              $4.18    $5.58    $8.64      N/A
 Together AI         $5.49    $6.79    $9.95      N/A
 Nebius              $3.85    $4.50    $7.15    $7.85
 Lambda Labs         $3.99      N/A    $6.69      N/A
-Spheron             $2.01    $3.31    $2.74    $3.29
+Spheron               N/A      N/A      N/A      N/A
 E2E Networks        $2.90    $3.49    $6.50      N/A

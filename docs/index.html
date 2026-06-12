@@ -449,7 +449,7 @@
           <span class="status-text">Active Monitoring</span>
         </div>
         <div class="update-badge">
-          Last Updated: June 12, 2026 at 11:10 AM IST
+          Last Updated: June 12, 2026 at 11:22 AM IST
         </div>
       </div>
     </div>
@@ -507,7 +507,7 @@
           <td class="provider">
             <a href="https://www.together.ai/pricing#gpu-clusters" target="_blank">Together AI</a>
           </td>
-          <td><span class="price">$5.49</span></td><td><span class="price outlier">$6.79</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
+          <td><span class="price">$5.49</span></td><td><span class="price">$6.79</span></td><td><span class="price">$9.95</span></td><td><span class="na">—</span></td>
         </tr>
         <tr>
           <td class="provider">
@@ -525,15 +525,15 @@
           <td class="provider">
             <a href="https://www.spheron.network/gpu-rental/h100/" target="_blank">Spheron</a>
           </td>
-          <td><span class="price">$2.01</span></td><td><span class="price">$3.31</span></td><td><span class="price outlier">$2.74</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td><td><span class="price outlier">$3.29</span> <span class="flag" title="Price is >50% away from the all-player median — verify manually">⚠️</span></td>
+          <td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">—</span></td>
         </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Average</strong></td>
-      <td>$3.79</td><td>$4.35</td><td>$7.71</td><td>$7.67</td>
+      <td>$4.15</td><td>$5.22</td><td>$7.71</td><td>$7.67</td>
     </tr>
     <tr class="summary-row int-summary-row">
       <td class="provider"><strong>International Median</strong></td>
-      <td>$3.92</td><td>$4.50</td><td>$6.92</td><td>$7.50</td>
+      <td>$3.99</td><td>$5.04</td><td>$7.15</td><td>$7.67</td>
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr><tr class="group-header-row"><td colspan="5"><strong>Indian Providers</strong></td></tr>
         <tr>
           <td class="provider">
@@ -557,53 +557,18 @@
     </tr><tr class="table-spacer-row"><td colspan="5"></td></tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Average (All)</strong></td>
-      <td>$3.76</td><td>$4.27</td><td>$7.51</td><td>$7.67</td>
+      <td>$4.01</td><td>$4.85</td><td>$7.51</td><td>$7.67</td>
     </tr>
     <tr class="summary-row all-summary-row">
       <td class="provider"><strong>Total Median (All)</strong></td>
-      <td>$3.92</td><td>$4.50</td><td>$6.69</td><td>$7.50</td>
+      <td>$3.99</td><td>$4.62</td><td>$6.92</td><td>$7.67</td>
     </tr></tbody></table>
   </div>
   <p class="table-note">* Note: Averages (but not medians) exclude pricing anomalies that are more than 50% above or below the overall median. Outliers are highlighted in red.</p>
 
   <p class="section-title">Sanity Check — Flagged Prices</p>
   <div class="card-wrap sanity-wrap">
-    
-    <table class="flagged-table">
-      <thead>
-        <tr>
-          <th>Provider</th>
-          <th>GPU Chip</th>
-          <th>Scraped Price</th>
-          <th>All-Player Median</th>
-          <th>Deviation</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-                        <tr>
-                          <td>Together AI</td>
-                          <td>H200 SXM</td>
-                          <td class="flagged-price">$6.79</td>
-                          <td>$4.50</td>
-                          <td class="flagged-deviation"><span class="deviation-sign">+</span>50.9%</td>
-                        </tr>
-                        <tr>
-                          <td>Spheron</td>
-                          <td>B200 SXM</td>
-                          <td class="flagged-price">$2.74</td>
-                          <td>$6.69</td>
-                          <td class="flagged-deviation"><span class="deviation-sign">-</span>59.0%</td>
-                        </tr>
-                        <tr>
-                          <td>Spheron</td>
-                          <td>B300 SXM</td>
-                          <td class="flagged-price">$3.29</td>
-                          <td>$7.50</td>
-                          <td class="flagged-deviation"><span class="deviation-sign">-</span>56.1%</td>
-                        </tr>
-      </tbody>
-    </table>
+    <p class="all-good">✓ All extracted prices are within normal expected ranges.</p>
   </div>
 
   <p class="section-title">Price Trends — Lowest Available per Chip</p>
@@ -667,8 +632,8 @@
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["2026-06-10", "2026-06-10", "2026-06-10", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-12", "2026-06-12", "2026-06-12", "2026-06-12", "2026-06-12"],
-        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 2.9, 2.6, 2.01, 2.01, 2.01, 3.25, 2.01, null, 2.6, 2.01, 2.01], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31, 3.12, 3.13, 3.13, 3.13, 4.0, 3.13, null, 3.13, 3.13, 3.31], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 6.11, 4.58, 6.11, 6.11, 6.11, 6.11, 5.34, null, 5.34, 5.34, 6.11], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, null, 7.5, 7.5, 7.5], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
+        labels: ["2026-06-10", "2026-06-10", "2026-06-10", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-11", "2026-06-12", "2026-06-12", "2026-06-12", "2026-06-12", "2026-06-12", "2026-06-12"],
+        datasets: [{"label": "H100 SXM (lowest)", "data": [2.01, 2.01, 2.9, 2.6, 2.01, 2.01, 2.01, 3.25, 2.01, null, 2.6, 2.01, 2.01, 2.9], "borderColor": "#2563eb", "backgroundColor": "#2563eb33", "tension": 0.3, "spanGaps": true}, {"label": "H200 SXM (lowest)", "data": [3.12, 3.13, 3.31, 3.12, 3.13, 3.13, 3.13, 4.0, 3.13, null, 3.13, 3.13, 3.31, 3.49], "borderColor": "#ea580c", "backgroundColor": "#ea580c33", "tension": 0.3, "spanGaps": true}, {"label": "B200 SXM (lowest)", "data": [5.34, 5.34, 6.11, 4.58, 6.11, 6.11, 6.11, 6.11, 5.34, null, 5.34, 5.34, 6.11, 6.11], "borderColor": "#16a34a", "backgroundColor": "#16a34a33", "tension": 0.3, "spanGaps": true}, {"label": "B300 SXM (lowest)", "data": [7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, null, 7.5, 7.5, 7.5, 7.5], "borderColor": "#e11d48", "backgroundColor": "#e11d4833", "tension": 0.3, "spanGaps": true}],
       },
       options: {
         responsive: true,
