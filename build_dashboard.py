@@ -1130,9 +1130,15 @@ def main():
     latest, history = load_data()
     html = generate_html(latest, history)
 
-    out = docs_dir / "index.html"
-    out.write_text(html, encoding="utf-8")
-    print(f"Dashboard written to {out}")
+    # Write to docs/index.html for GitHub Pages
+    out_docs = docs_dir / "index.html"
+    out_docs.write_text(html, encoding="utf-8")
+    print(f"Dashboard written to {out_docs}")
+
+    # Write to root index.html for Vercel
+    out_root = Path("index.html")
+    out_root.write_text(html, encoding="utf-8")
+    print(f"Dashboard written to {out_root}")
 
 
 if __name__ == "__main__":
