@@ -1,5 +1,5 @@
 GPU Pricing Tracker — Starting run
-Time: 2026-06-12T05:52:20.231028+00:00
+Time: 2026-06-12T06:01:12.478181+00:00
 Chips: ['H100', 'H200', 'B200', 'B300']
 Sites: 8
 
@@ -22,12 +22,7 @@ Scraping: Verda — https://verda.com/products#H100
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://verda.com/products#H100...
 Extracted 12460 chars. Cleaned to 9273 chars. Parsing with Groq...
-Raw output: {
-  "H100": 3.25,
-   "H200": 4.00,
-   "B200": 6.11,
-   "B300": 7.50
-}
+  ERROR scraping Verda: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99749, Requested 4201. Please try again in 56m52.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: RunPod — https://www.runpod.io/pricing
@@ -35,12 +30,7 @@ Scraping: RunPod — https://www.runpod.io/pricing
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://www.runpod.io/pricing...
 Extracted 9324 chars. Cleaned to 652 chars. Parsing with Groq...
-Raw output: {
-  "H100": 4.18,
-   "H200": 5.58,
-   "B200": 8.64,
-   "B300": null
-}
+  ERROR scraping RunPod: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99740, Requested 686. Please try again in 6m8.063999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: Together AI — https://www.together.ai/pricing#gpu-clusters
@@ -48,12 +38,7 @@ Scraping: Together AI — https://www.together.ai/pricing#gpu-clusters
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://www.together.ai/pricing#gpu-clusters...
 Extracted 4742 chars. Cleaned to 2494 chars. Parsing with Groq...
-Raw output: {
-  "H100": 5.49,
-   "H200": 6.79,
-   "B200": 9.95,
-   "B300": null
-}
+  ERROR scraping Together AI: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99733, Requested 1523. Please try again in 18m5.184s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: Nebius — https://nebius.com/prices
@@ -61,12 +46,7 @@ Scraping: Nebius — https://nebius.com/prices
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://nebius.com/prices...
 Extracted 5909 chars. Cleaned to 2560 chars. Parsing with Groq...
-Raw output: {
-  "H100": 3.85,
-   "H200": 4.50,
-   "B200": 7.15,
-   "B300": 7.85
-}
+  ERROR scraping Nebius: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99722, Requested 1158. Please try again in 12m40.32s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: Lambda Labs — https://lambda.ai/pricing
@@ -74,12 +54,7 @@ Scraping: Lambda Labs — https://lambda.ai/pricing
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://lambda.ai/pricing...
 Extracted 1775 chars. Cleaned to 1253 chars. Parsing with Groq...
-Raw output: {
-  "H100": 3.99,
-   "H200": null,
-   "B200": 6.69,
-   "B300": null
-}
+  ERROR scraping Lambda Labs: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99714, Requested 836. Please try again in 7m55.2s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: Spheron — https://www.spheron.network/gpu-rental/h100/
@@ -90,7 +65,7 @@ Navigating to https://www.spheron.network/gpu-rental/h100/...
   Navigating to extra URL: https://www.spheron.network/gpu-rental/b200/...
   Navigating to extra URL: https://www.spheron.network/gpu-rental/b300/...
 Extracted 16207 chars. Cleaned to 13671 chars. Parsing with Groq...
-  ERROR scraping Spheron: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97833, Requested 4534. Please try again in 34m5.088s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+  ERROR scraping Spheron: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99699, Requested 4496. Please try again in 1h0m24.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
 ============================================================
 Scraping: E2E Networks — https://www.e2enetworks.com/pricing
@@ -98,14 +73,9 @@ Scraping: E2E Networks — https://www.e2enetworks.com/pricing
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://www.e2enetworks.com/pricing...
 Extracted 3682 chars. Cleaned to 2020 chars. Parsing with Groq...
-Raw output: {
-  "H100": 2.90,
-   "H200": 3.49,
-   "B200": 6.50,
-   "B300": null
-}
+  ERROR scraping E2E Networks: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01ktnq4yt9e3zb8xs5ax6kydae` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99688, Requested 1180. Please try again in 12m29.952s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
 
-Snapshot saved: data/snapshot_20260612_055329.json
+Snapshot saved: data/snapshot_20260612_060220.json
 Latest saved:  data/latest.json
 History saved: data/history.json
 
@@ -115,10 +85,10 @@ SUMMARY
 Site                 H100     H200     B200     B300
 ------------------------------------------------------------
 Neysa               $4.39    $4.73      N/A      N/A
-Verda               $3.25    $4.00    $6.11    $7.50
-RunPod              $4.18    $5.58    $8.64      N/A
-Together AI         $5.49    $6.79    $9.95      N/A
-Nebius              $3.85    $4.50    $7.15    $7.85
-Lambda Labs         $3.99      N/A    $6.69      N/A
+Verda                 N/A      N/A      N/A      N/A
+RunPod                N/A      N/A      N/A      N/A
+Together AI           N/A      N/A      N/A      N/A
+Nebius                N/A      N/A      N/A      N/A
+Lambda Labs           N/A      N/A      N/A      N/A
 Spheron               N/A      N/A      N/A      N/A
-E2E Networks        $2.90    $3.49    $6.50      N/A
+E2E Networks          N/A      N/A      N/A      N/A
