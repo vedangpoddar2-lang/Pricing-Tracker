@@ -1,5 +1,5 @@
 GPU Pricing Tracker — Initializing run
-Time: 2026-06-15T02:40:23.869915+00:00
+Time: 2026-06-15T09:52:09.783360+00:00
 Chips: ['H100', 'H200', 'B200', 'B300']
 Initialized current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
@@ -18,15 +18,154 @@ Scraping: Neysa — https://neysa.ai/pricing/
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://neysa.ai/pricing/...
-Extracted 4828 chars. Cleaned to 3325 chars. Parsing with None...
+Extracted 4843 chars. Cleaned to 3325 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
   gemini rate limit (attempt 1/3). Waiting 90s...
   gemini rate limit (attempt 2/3). Waiting 90s...
   ERROR scraping Neysa: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+Please retry in 43.999601246s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 43
+}
+]
+Updated neysa in data/current_run.json.
+/home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Incremental Scrape: Verda
+
+============================================================
+Scraping: Verda — https://verda.com/products#H100
+============================================================
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://verda.com/products#H100...
+  Text capped at 6000 chars.
+Extracted 12483 chars. Cleaned to 6000 chars. Parsing with None...
+LLM backend: Google Gemini 2.0 Flash
+  gemini rate limit (attempt 1/3). Waiting 90s...
+  gemini rate limit (attempt 2/3). Waiting 90s...
+  ERROR scraping Verda: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+Please retry in 36.460115131s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 36
+}
+]
+Updated verda in data/current_run.json.
+/home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Incremental Scrape: RunPod
+
+============================================================
+Scraping: RunPod — https://www.runpod.io/pricing
+============================================================
+BROWSERBASE_API_KEY missing, launching local Chromium...
+Navigating to https://www.runpod.io/pricing...
+Extracted 9385 chars. Cleaned to 652 chars. Parsing with None...
+LLM backend: Google Gemini 2.0 Flash
+  gemini rate limit (attempt 1/3). Waiting 90s...
+  gemini rate limit (attempt 2/3). Waiting 90s...
+  ERROR scraping RunPod: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 29.724757414s. [links {
+Please retry in 29.112766752s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
@@ -70,145 +209,6 @@ violations {
   seconds: 29
 }
 ]
-Updated neysa in data/current_run.json.
-/home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
-
-All support for the `google.generativeai` package has ended. It will no longer be receiving 
-updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
-See README for more details:
-
-https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
-
-  import google.generativeai as genai
-Incremental Scrape: Verda
-
-============================================================
-Scraping: Verda — https://verda.com/products#H100
-============================================================
-BROWSERBASE_API_KEY missing, launching local Chromium...
-Navigating to https://verda.com/products#H100...
-  Text capped at 6000 chars.
-Extracted 12483 chars. Cleaned to 6000 chars. Parsing with None...
-LLM backend: Google Gemini 2.0 Flash
-  gemini rate limit (attempt 1/3). Waiting 90s...
-  gemini rate limit (attempt 2/3). Waiting 90s...
-  ERROR scraping Verda: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
-Please retry in 21.659132938s. [links {
-  description: "Learn more about Gemini API quotas"
-  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
-}
-, violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
-  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-, retry_delay {
-  seconds: 21
-}
-]
-Updated verda in data/current_run.json.
-/home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
-
-All support for the `google.generativeai` package has ended. It will no longer be receiving 
-updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
-See README for more details:
-
-https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
-
-  import google.generativeai as genai
-Incremental Scrape: RunPod
-
-============================================================
-Scraping: RunPod — https://www.runpod.io/pricing
-============================================================
-BROWSERBASE_API_KEY missing, launching local Chromium...
-Navigating to https://www.runpod.io/pricing...
-Extracted 9385 chars. Cleaned to 652 chars. Parsing with None...
-LLM backend: Google Gemini 2.0 Flash
-  gemini rate limit (attempt 1/3). Waiting 90s...
-  gemini rate limit (attempt 2/3). Waiting 90s...
-  ERROR scraping RunPod: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 14.192464232s. [links {
-  description: "Learn more about Gemini API quotas"
-  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
-}
-, violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
-  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
-  quota_dimensions {
-    key: "model"
-    value: "gemini-2.0-flash"
-  }
-  quota_dimensions {
-    key: "location"
-    value: "global"
-  }
-}
-, retry_delay {
-  seconds: 14
-}
-]
 Updated runpod in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -234,7 +234,7 @@ LLM backend: Google Gemini 2.0 Flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 7.050472677s. [links {
+Please retry in 21.772181769s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
@@ -275,7 +275,7 @@ violations {
   }
 }
 , retry_delay {
-  seconds: 7
+  seconds: 21
 }
 ]
 Updated together in data/current_run.json.
@@ -303,7 +303,7 @@ LLM backend: Google Gemini 2.0 Flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
-Please retry in 58.594279389s. [links {
+Please retry in 12.590667718s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
@@ -344,7 +344,7 @@ violations {
   }
 }
 , retry_delay {
-  seconds: 58
+  seconds: 12
 }
 ]
 Updated nebius in data/current_run.json.
@@ -372,7 +372,7 @@ LLM backend: Google Gemini 2.0 Flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 51.727339576s. [links {
+Please retry in 5.611946761s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
@@ -413,7 +413,7 @@ violations {
   }
 }
 , retry_delay {
-  seconds: 51
+  seconds: 5
 }
 ]
 Updated lambda in data/current_run.json.
@@ -442,16 +442,16 @@ LLM backend: Google Gemini 2.0 Flash
   gemini rate limit (attempt 1/3). Waiting 90s...
   gemini rate limit (attempt 2/3). Waiting 90s...
   ERROR scraping Spheron: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 38.68170612s. [links {
+Please retry in 52.476450524s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
 , violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
-  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
   quota_dimensions {
     key: "model"
     value: "gemini-2.0-flash"
@@ -474,8 +474,8 @@ violations {
   }
 }
 violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
   quota_dimensions {
     key: "model"
     value: "gemini-2.0-flash"
@@ -486,7 +486,7 @@ violations {
   }
 }
 , retry_delay {
-  seconds: 38
+  seconds: 52
 }
 ]
 Updated spheron in data/current_run.json.
@@ -511,16 +511,16 @@ LLM backend: Google Gemini 2.0 Flash
   gemini rate limit (attempt 1/3). Waiting 90s...
   gemini rate limit (attempt 2/3). Waiting 90s...
   ERROR scraping E2E Networks: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
 * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
-Please retry in 30.299810771s. [links {
+Please retry in 43.882572253s. [links {
   description: "Learn more about Gemini API quotas"
   url: "https://ai.google.dev/gemini-api/docs/rate-limits"
 }
 , violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
-  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
   quota_dimensions {
     key: "model"
     value: "gemini-2.0-flash"
@@ -543,8 +543,8 @@ violations {
   }
 }
 violations {
-  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
-  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
   quota_dimensions {
     key: "model"
     value: "gemini-2.0-flash"
@@ -555,7 +555,7 @@ violations {
   }
 }
 , retry_delay {
-  seconds: 30
+  seconds: 43
 }
 ]
 Updated e2e in data/current_run.json.
