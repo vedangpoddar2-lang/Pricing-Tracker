@@ -17,7 +17,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T00:57:37.522105+00:00"
+    "scraped_at": "2026-08-17T00:36:30.529467+00:00"
   },
   {
     "site_id": "verda",
@@ -37,7 +37,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:00:43.660338+00:00"
+    "scraped_at": "2026-08-17T00:36:35.548843+00:00"
   },
   {
     "site_id": "runpod",
@@ -57,7 +57,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:03:50.099924+00:00"
+    "scraped_at": "2026-08-17T00:36:40.199917+00:00"
   },
   {
     "site_id": "together",
@@ -77,7 +77,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:06:55.322841+00:00"
+    "scraped_at": "2026-08-17T00:36:45.141530+00:00"
   },
   {
     "site_id": "nebius",
@@ -97,7 +97,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:10:00.518448+00:00"
+    "scraped_at": "2026-08-17T00:36:51.382359+00:00"
   },
   {
     "site_id": "lambda",
@@ -117,7 +117,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:13:05.437704+00:00"
+    "scraped_at": "2026-08-17T00:36:56.193859+00:00"
   },
   {
     "site_id": "spheron",
@@ -137,7 +137,7 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:16:17.520311+00:00"
+    "scraped_at": "2026-08-17T00:37:08.043705+00:00"
   },
   {
     "site_id": "e2e",
@@ -157,6 +157,6 @@
         "price_usd_per_hour": null
       }
     },
-    "scraped_at": "2026-08-10T01:19:24.482013+00:00"
+    "scraped_at": "2026-08-17T00:37:14.160974+00:00"
   }
 ]
