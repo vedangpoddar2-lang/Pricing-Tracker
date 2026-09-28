@@ -1,5 +1,5 @@
 GPU Pricing Tracker — Initializing run
-Time: 2026-09-21T02:13:33.642636+00:00
+Time: 2026-09-28T02:27:15.695123+00:00
 Chips: ['H100', 'H200', 'B200', 'B300']
 Initialized current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
@@ -18,9 +18,9 @@ Scraping: Neysa — https://neysa.ai/pricing/
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://neysa.ai/pricing/...
-Extracted 4330 chars. Cleaned to 2582 chars. Parsing with None...
+Extracted 4306 chars. Cleaned to 2588 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Neysa: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Neysa: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated neysa in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -38,9 +38,9 @@ Scraping: Verda — https://verda.com/products#H100
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://verda.com/products#H100...
-Extracted 1291 chars. Cleaned to 232 chars. Parsing with None...
+Extracted 1286 chars. Cleaned to 290 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Verda: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Verda: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated verda in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -58,10 +58,9 @@ Scraping: RunPod — https://www.runpod.io/pricing
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://www.runpod.io/pricing...
-  Text capped at 6000 chars.
-Extracted 10138 chars. Cleaned to 6000 chars. Parsing with None...
+Extracted 10254 chars. Cleaned to 786 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping RunPod: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping RunPod: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated runpod in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -79,9 +78,9 @@ Scraping: Together AI — https://www.together.ai/pricing#gpu-clusters
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://www.together.ai/pricing#gpu-clusters...
-Extracted 7565 chars. Cleaned to 4127 chars. Parsing with None...
+Extracted 7573 chars. Cleaned to 4151 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Together AI: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Together AI: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated together in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -99,9 +98,9 @@ Scraping: Nebius — https://nebius.com/prices
 ============================================================
 BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://nebius.com/prices...
-Extracted 5742 chars. Cleaned to 2608 chars. Parsing with None...
+Extracted 6897 chars. Cleaned to 3687 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Nebius: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Nebius: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated nebius in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -121,7 +120,7 @@ BROWSERBASE_API_KEY missing, launching local Chromium...
 Navigating to https://lambda.ai/pricing...
 Extracted 1772 chars. Cleaned to 1234 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Lambda Labs: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Lambda Labs: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated lambda in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -145,7 +144,7 @@ Navigating to https://www.spheron.network/gpu-rental/h100/...
   Text capped at 6000 chars.
 Extracted 16207 chars. Cleaned to 6000 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping Spheron: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping Spheron: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated spheron in data/current_run.json.
 /home/runner/work/Pricing-Tracker/Pricing-Tracker/scraper.py:32: FutureWarning: 
 
@@ -166,7 +165,7 @@ Navigating to https://www.e2enetworks.com/pricing...
   Text capped at 6000 chars.
 Extracted 17085 chars. Cleaned to 6000 chars. Parsing with None...
 LLM backend: Google Gemini 2.0 Flash
-  ERROR scraping E2E Networks: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.
+  ERROR scraping E2E Networks: 404 This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).
 Updated e2e in data/current_run.json.
 GPU Pricing Tracker — Finalizing run
 
